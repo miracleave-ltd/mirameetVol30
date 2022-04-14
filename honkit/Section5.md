@@ -5,10 +5,10 @@
 　GCP内をCleanUpしたい方は以下手順を行ってください  
 
 ## API無効化  
-![](img/draw_flow_0.png)  
+
 
 ## BigQueryの削除  
-![](img/draw_flow_0.png)  
+
 
 ## Cloud Functionの削除
-![](img/draw_flow_0.png)  
+
