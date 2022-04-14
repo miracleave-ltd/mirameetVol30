@@ -2,7 +2,7 @@
 この手順では、GoogleMapJavaSciriptAPIを使い、BigQueryの情報を絞り込んでピン止めするプログラムを  
 Web上で開発出来るCloud Shell Editerを使って開発していきます。  
 また、開発したプログラムはCloud Shell Editerで実行し、動作確認をしていきます。  
-![](img/draw_flow_0.png)  
+
 
 
 ## ソースコードの取得  
@@ -12,18 +12,18 @@ https://developers.google.com/maps/documentation/javascript/examples/map-simple
 
 少しページをスクロールしたところにサンプルのソースコードがあります。  
 Google Cloud Shellを選択し、コードを取得します。  
-![](img/draw_flow_0.png)  
+
 
 Cloud Shell Editerが開き、ソースコードが配置されています。  
 フロントエンドの動作確認は全てCloud Shell Editer上から可能です。  
-![](img/draw_flow_0.png)  
+
 
 まずは、サンプルコードを実行してみましょ。  
 左欄からDebugを選び、再生ボタンをクリックします。  
-![](img/draw_flow_0.png)  
+
 
 右上にあるプレビューボタンからWebページの動作を確認します。
-![](img/draw_flow_0.png)  
+
 
 ## BigQueryとの連携
 手順②で作成したCloud FunctionではBigQueryにアクセスし、検索結果をレスポンスで返却しているので、  
@@ -79,8 +79,8 @@ let infoWindow: google.maps.InfoWindow;
 ```
 
 プレビューボタンより、動作を確認します。  
-![](img/draw_flow_0.png)  
+
 
 BigQueryに登録したスター情報を絞り込んで検索出来ています。  
 また、ピンや吹き出しも追加出来ています。  
-![](img/draw_flow_0.png)  
+

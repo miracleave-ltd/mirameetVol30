@@ -1,12 +1,12 @@
 # 検索プログラムの作成  
 この手順では、BigQueryを検索するプログラムをJavaScriptで作成します。  
 また、作成したプログラムはNode.Jsで実行するため、サーバーレスで実行可能なCloud Funcitonにデプロイしていきます。  
-![](img/draw_flow_0.png)  
+
 
 ## Cloud Functionの設定  
 Cloud Functionを設定します。  
 【ToDo】詳細な設定手順を記載する
-![](img/draw_flow_0.png)  
+
 
 ## BigQueryAPIのコード  
 BigQueryAPIにアクセスするコードを記述していきます。
@@ -73,10 +73,10 @@ exports.main = (req, res) => {
 
 Cloud Functionをデプロイします。
 【ToDo】詳細な設定手順を記載する
-![](img/draw_flow_0.png)  
+
 
 動作確認をします。
-![](img/draw_flow_0.png)  
+
 
 以上で、バックエンドの処理は完了です。
 
