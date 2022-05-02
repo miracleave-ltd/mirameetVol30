@@ -1,13 +1,13 @@
-# 事前準備内容の確認
+# GCPのAPI有効化
+今回使用するGCPのAPIを有効化します。
 
+----
 ## GCPアカウントの確認  
-以下URLにアクセスしGCPコンソールへログインすると、下記のようなダッシュボード画面が表示されることを確認します。  
-https://console.cloud.google.com/
+1. 以下URLにアクセスし、GCPコンソールへログインします。  
+https://console.cloud.google.com/  
+2. ダッシュボード画面が表示されることを確認します。  
 
 ## GCPのAPI有効化  
-検索バーから「BigQuery API」と検索し、BigQueryAPIを有効化します。  
-
-検索バーから「Maps JavaScript API」と検索し、GoogleMapJavaScriptAPIを有効化します。  
-
-検索バーから「Cloud Functions API」と検索し、Cloud Functions APIを有効化します。  
-
+1. 以下URLまたは、検索バーから「Maps JavaScript API」と検索し、GoogleMap JavaScript APIを有効化します。  
+https://console.cloud.google.com/marketplace/product/google/maps-backend.googleapis.com
+![](img/section1-1.png) 

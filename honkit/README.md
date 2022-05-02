@@ -1,33 +1,46 @@
-# 【タイトル】  
-第26回目の開催となる【タイトル】です！  
+# はじめに  
+## 今回のゴール
+BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  
+データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionを使用していきます  
+今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。  
+PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
+![](img/mirameetvol30.drawio_0.png) 
 
----
+使用する技術要素については、以下となります。  
+※ページの最後に、技術要素の参考サイトを記載しています。  
+- フロントエンド
+  - TypeScript
+  - Node.js
+  - Cloud Shell Editer（開発環境兼、localhosの実行環境）
+- バックエンド
+  - JavaScript
+  - Node.js
+  - Cloud Function（サーバーレス）
+- API
+  - GoogleMap JavaScript API
+  - BigQuery API
+  - Cloud Storage API
+- データベース
+  - BigQuery
+- ストレージ
+  - Cloud Storage
 
-## 今回のやりたいこと
-GoogleMapではお気に入りの地図情報をリストとして保存することが出来ますが、リスト内の検索が出来ません・・・。  
-では、作ってしまおう!!ということで、
-今回は、お気に入りの地図情報をBigQueryに溜めて絞り込みを行い、GoogleMapに反映してみたいと思います！  
-BigQueryの絞り込みや、GoogleMapの反映はGoogleMapAPI・BigQueryAPIを使用します。  
-また、開発の実行環境はCloud Shell Editer、バックエンドのサーバーはClud Functionを使用します。  
-
-## 事前準備
-- Googleアカウント作成
+## 事前に準備頂きたいこと
 - GCPアカウントの作成
+  - BigQueryのデータセット作成
+  - Cloud Storageのバケット作成
 
-## 手順
-![](img/draw_flow_0.png)  
+## 手順 
 全体手順としては次の流れで進めます。  
- 0.事前準備内容の確認  
- 1.テストデータの登録  
- 2.検索プログラムの作成  
- 3.GoogleMapへ反映  
+ 　0.GCPのAPI有効化  
+ 　1.データ登録機能作成  
+ 　2.検索機能作成  
+ 　3.Map画面作成  
 
 ## 技術要素
 参考サイトのリンクを記載しておきますので、参考にお使いください。  
-- [GoogleMapAPI](https://developers.google.com/maps/documentation/javascript/local-context/samples/neighborhood)
-- [BigQueryAPI](https://qiita.com/zaburo/items/344ed0caab369c2f94c5)
-- [JSON形式のBigQuery取り込み](https://cloud.google.com/bigquery/docs/loading-data-cloud-storage-json#bq)
-
----
-
-今回の手順ではGoogleChromeのみ使用します。OS問わずハンズオン可能です。
+- [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript?hl=ja)
+  - [WebGL Overlay (ThreeJS wrapper)](https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja)のサンプルコードをベースにしています。
+- [BigQuery API](https://cloud.google.com/bigquery/docs/reference/libraries-overview)
+- [Cloud Storage API](https://cloud.google.com/storage/docs/apis?hl=ja)
+- [Cloud Function](https://cloud.google.com/functions/docs/concepts/overview?hl=ja)

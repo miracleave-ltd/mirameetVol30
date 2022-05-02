@@ -231,58 +231,97 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="検索プログラムの作成"><a name="検索プログラムの作成" class="plugin-anchor" href="#検索プログラムの作成"><i class="fa fa-link" aria-hidden="true"></i></a>検索プログラムの作成</h1>
+                                <h1 id="検索機能作成"><a name="検索機能作成" class="plugin-anchor" href="#検索機能作成"><i class="fa fa-link" aria-hidden="true"></i></a>検索機能作成</h1>
 <p>この手順では、BigQueryを検索するプログラムをJavaScriptで作成します。<br>また、作成したプログラムはNode.Jsで実行するため、サーバーレスで実行可能なCloud Funcitonにデプロイしていきます。  </p>
-<h2 id="Cloud_Functionの設定">1. Cloud Functionの設定</h2>
-<p>Cloud Functionを設定します。<br>【ToDo】詳細な設定手順を記載する</p>
-<h2 id="BigQueryAPIのコード">2. BigQueryAPIのコード</h2>
-<p>BigQueryAPIにアクセスするコードを記述していきます。
-requireでBigQueryAPIを読み込みます。</p>
+<h2 id="_">1.  </h2>
+<h2 id="検索機能を作成する">2. 検索機能を作成する</h2>
+<ol>
+<li>Cloud Functionを開きます。<br><a href="https://console.cloud.google.com/functions/" target="_blank">https://console.cloud.google.com/functions/</a>  </li>
+<li>『関数の作成』を選択します。</li>
+<li><p>以下設定内容で、基本設定とトリガー設定を行います。<br>※以下以外は全てデフォルト設定</p>
+<p> |  設定項目  |  設定値  |
+ | ---- | ---- |
+ |  環境  |  第１世代  |
+ |  関数名  |  bigquerySelect  |
+ |  リージョン  |  us-central1  |
+ |  トリガータイプ  |  HTTP  |</p>
+</li>
+<li><p>『保存』→『次へ』を選択します。 
+ <img src="img/section3-1.png" alt>   </p>
+</li>
+<li>ランタイムは&quot;Node.js 16&quot;を選択します。</li>
+<li><p>index.jsを開き、以下コードに書き換えます。<br>エントリポイントは、JavaScriptのプログラムに合わせ、&quot;main&quot;に変更します。<br>このプログラムは、リクエストパラメータを条件に、SELECT文を作成し、BigQuery APIを用いてBigQueryのデータを検索しています。<br>検索結果はレスポンス情報として、返却します。<br> <img src="img/section3-2.png" alt>   </p>
+<ul>
+<li><p>ソースコード</p>
 <pre><code>const { BigQuery } = require(&apos;@google-cloud/bigquery&apos;);
-</code></pre><p>BigQueryのオブジェクトを生成し、BigQueryのプロジェクトIDを記述します。<br>プロジェクトIDはアカウントによって異なります。  </p>
-<pre><code>const bigquery = new BigQuery({
-    projectId: &apos;【プロジェクトID】&apos;
-});
-</code></pre><p>BigQueryを検索するSQLを記述します。<br>今回はAddressをLIKE検索で絞り込みたいと思います。  </p>
-<pre><code>const query = &quot;SELECT &quot;+
-              &quot; features.properties.Location.GeoCoordinates.Latitude AS Latitude &quot;+
-              &quot; , features.properties.Location.GeoCoordinates.Longitude AS Longitude &quot;+
-              &quot; , features.properties.Location.BusinessName AS BusinessName &quot;+
-              &quot;FROM TEST.TEST1 &quot;+
-              &quot;WHERE features.properties.Location.Address LIKE &apos;%【検索キーワード】%&apos;&quot;;
-</code></pre><p>BigQueryに登録されているデータは、ネストされた形式になっています。<br>通常のSQLだとエラーとなるため、LegacySQLで取得する必要があるため、useLegacySqlを&quot;true&quot;に設定します。</p>
-<pre><code>//with options
-const options = {
-    query: query,
-    useLegacySql: true,
+const bigquery = new BigQuery();
+
+exports.main = (req, res) =&gt; {
+
+   let query = &quot;SELECT &quot;+
+               &quot;  Latitude,Longitude &quot;+
+               &quot;FROM ( &quot;+
+               &quot;  SELECT &quot;+
+               &quot;    GeoCoordinates &quot;+
+               &quot;  FROM ( &quot;+
+               &quot;    SELECT &quot;+
+               &quot;      Location &quot;+
+               &quot;    FROM ( &quot;+
+               &quot;      SELECT&quot;+
+               &quot;        properties&quot;+
+               &quot;      FROM 【指定のデータセット名】.TEST_TABLE&quot;+
+               &quot;      ,UNNEST(features)&quot;+
+               &quot;    ),UNNEST(properties) &quot;+
+               &quot;  ),UNNEST(Location) &quot;;
+   if (req.query.address != null) {
+       query = query + &quot; WHERE BusinessName LIKE &apos;%&quot; + req.query.address + &quot;%&apos; ),UNNEST(GeoCoordinates) LIMIT 1&quot;;
+   } else {
+       query = query + &quot; ),UNNEST(GeoCoordinates) LIMIT 1&quot;;
+   }
+
+   //with options
+   const options = {
+       query: query,
+       useLegacySql: true,
+   };
+
+   bigquery.createQueryJob(options)
+       .then(results =&gt; {
+           const [job] = results;
+           return job.getQueryResults();
+       })
+       .then(results =&gt; {
+           const [rows] = results;
+           res.header(&apos;Access-Control-Allow-Origin&apos;, &quot;*&quot;);
+           res.header(&apos;Access-Control-Allow-Headers&apos;, &quot;Origin, X-Requested-With, Content-Type, Accept&quot;);
+           res.status(200).send(rows);
+       })
+       .catch(error =&gt; {
+           console.log(error);
+       });
 }
-</code></pre><p>次にメイン処理を追加します。
-BigQueryAPIにリクエストを投げて、レスポンス情報を取得する簡単なロジックになります。  </p>
-<pre><code>exports.main = (req, res) =&gt; {
-    bigquery.createQueryJob(options)
-        .then(results =&gt; {
-            const [job] = results;
-            return job.getQueryResults();
-        })
-        .then(results =&gt; {
-            const [rows] = results;
-            res.header(&apos;Access-Control-Allow-Origin&apos;, &quot;*&quot;);
-            res.header(&apos;Access-Control-Allow-Headers&apos;, &quot;Origin, X-Requested-With, Content-Type, Accept&quot;);
-            res.status(200).send(rows);
-        })
-        .catch(error =&gt; {
-            console.log(error);
-        })
-}
-</code></pre><p>最後に、BigQueryにアクセスするため、BigQueryAPIの依存関係を追加します。  </p>
-<pre><code>  &quot;dependencies&quot;: {
-    &quot;@google-cloud/bigquery&quot;: &quot;^5.10.0&quot;
-  }
-</code></pre><p>Cloud Functionをデプロイします。
-【ToDo】詳細な設定手順を記載する</p>
-<p>動作確認をします。</p>
-<p>以上で、バックエンドの処理は完了です。</p>
-<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#検索プログラムの作成">検索プログラムの作成</a></p><li><a href="#Cloud_Functionの設定">1. Cloud Functionの設定</a></li><li><a href="#BigQueryAPIのコード">2. BigQueryAPIのコード</a></li></ul></div><a href="#Cloud_Functionの設定" id="goTop"><i class="fa fa-arrow-up"></i></a>
+</code></pre></li>
+</ul>
+</li>
+<li>package.jsonを開き、dependenciesにgoogle-cloud/bigQueryを追記します。<pre><code> {
+   &quot;name&quot;: &quot;sample-http&quot;,
+   &quot;version&quot;: &quot;0.0.1&quot;,
+   &quot;dependencies&quot;: {
+     &quot;@google-cloud/bigquery&quot;: &quot;^5.10.0&quot;
+   }
+ }
+</code></pre> <img src="img/section3-3.png" alt>   </li>
+<li>『デプロイ』を選択し、デプロイされるのを待ちます。約１分ほどでデプロイが完了します。</li>
+<li>作成したCloud Function を選択します。
+<img src="img/section3-4.png" alt>   </li>
+<li>権限から『追加』を選択します。<br>alluserで&quot;Cloud Function開発者&quot;の権限を付け、『保存』を選択します。<br>&quot;リソースの一般公開&quot;の確認が求められるので、『一般アクセスを許可』を選択します。<br><img src="img/section3-5.png" alt><br><img src="img/section3-6.png" alt>   </li>
+</ol>
+<h2 id="動作確認">3. 動作確認</h2>
+<ol>
+<li>作成したCloud Function を選択し、トリガーURLから動作確認をします。<br> <img src="img/section3-7.png" alt>   </li>
+<li>リクエストパラメータがBigQueryの検索条件になりますが、条件にヒットしない場合、NULLが返却されていることがわかります。<br> <img src="img/section3-8.png" alt> </li>
+</ol>
+<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#検索機能作成">検索機能作成</a></p><li><a href="#_">1.  </a></li><li><a href="#検索機能を作成する">2. 検索機能を作成する</a></li><li><a href="#動作確認">3. 動作確認</a></li></ul></div><a href="#_" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
                                 </section>
                             
@@ -325,7 +364,7 @@ BigQueryAPIにリクエストを投げて、レスポンス情報を取得する
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"2. 検索プログラムの作成","level":"1.4","depth":1,"next":{"title":"3. GoogleMapへ反映","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"previous":{"title":"1. テストデータの登録","level":"1.3","depth":1,"path":"Section2.md","ref":"Section2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section3.md","mtime":"2022-04-14T05:15:45.048Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-04-14T05:16:57.754Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"2. 検索プログラムの作成","level":"1.4","depth":1,"next":{"title":"3. GoogleMapへ反映","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"previous":{"title":"1. テストデータの登録","level":"1.3","depth":1,"path":"Section2.md","ref":"Section2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section3.md","mtime":"2022-05-02T09:18:22.876Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-02T09:45:36.152Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
