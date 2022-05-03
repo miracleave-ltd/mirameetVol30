@@ -232,152 +232,92 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="データ登録機能作成"><a name="データ登録機能作成" class="plugin-anchor" href="#データ登録機能作成"><i class="fa fa-link" aria-hidden="true"></i></a>データ登録機能作成</h1>
-<p>今回は、データ（住所情報）は、JSON形式のデータを使用します。<br>JSONデータは、BigQueryに自動で取り込めるよう、Cloud Storageに配置し、<br>配置されたことトリガーとして、プログラムでBigQueryに自動登録するようにします。  </p>
-<h2 id="_">1.  </h2>
-<h2 id="テストデータ登録機能を作成する">2. テストデータ登録機能を作成する</h2>
+<p>テストデータは、JSON形式のデータを使用します。<br>テストデータはBigQueryに自動で取り込めるよう、Cloud Storageに配置し、<br>配置されたことトリガーとして、プログラムでBigQueryに自動登録するようにします。<br>実行環境はCloud Functionsです。  </p>
+<hr>
+<p><img src="img/mirameetvol30.drawio_1.png" alt> </p>
+<h2 id="テストデータ登録機能を作成する">1. テストデータ登録機能を作成する</h2>
 <ol>
-<li>Cloud Functionを開きます。<br><a href="https://console.cloud.google.com/functions/" target="_blank">https://console.cloud.google.com/functions/</a>  </li>
-<li>『関数の作成』を選択します。
-<img src="img/section2-1.png" alt>   </li>
-<li>必要なAPIの有効化が求められるので、『有効にする』を選択します。
-<img src="img/section2-2.png" alt>   </li>
-<li>以下設定内容で、基本設定とトリガー設定を行います。<br>※以下以外は全てデフォルト設定
- |  設定項目  |  設定値  |
- | ---- | ---- |
- |  環境  |  第１世代  |
- |  関数名  |  bigqueryLoad  |
- |  リージョン  |  us-central1  |
- |  トリガータイプ  |  Cloud Storage  |
- |  EventType  |  ファイナライズ / 作成  |
- |  バケット  |  *指定のバケット名  |</li>
-<li>『保存』→『次へ』を選択します。<br> <img src="img/section2-3.png" alt>   </li>
-<li>ランタイムは&quot;Node.js 16&quot;を選択します。</li>
-<li><p>index.jsを開き、以下コードに書き換えます。また、bucketNameとdatasetIdは指定の値に書き換えます。<br>このプログラムは、GCSに配置されたトリガー情報からファイル名を取得し、<br>指定のGCSバケットからBigQueryのテーブルにロードを行っています。<br>GCSとBigQueryのロケーションは同じである必要があります。今回は&quot;us-central1&quot;で統一しています。<br>そして、エントリポイントは、JavaScriptのプログラムに合わせ、&quot;main&quot;に変更します。
-<img src="img/section2-4.png" alt>   </p>
-<ul>
-<li><p>ソースコード</p>
-<pre><code>const { BigQuery  } = require(&apos;@google-cloud/bigquery&apos;);
-const { Storage } = require(&apos;@google-cloud/storage&apos;);
-const bigquery = new BigQuery();
-const storage = new Storage();
-
-exports.main = async (event, context) =&gt; {
-   const gcsEvent = event
-   const bucketName = 【指定のバケット名】
-   const metadata = {
-       sourceFormat: &apos;NEWLINE_DELIMITED_JSON&apos;,
-       schema: {
-           fields: [
-               {&quot;name&quot;: &quot;type&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
-               {
-               &quot;name&quot;: &quot;features&quot;,
-               &quot;type&quot;: &quot;RECORD&quot;,
-               &quot;mode&quot;: &quot;REPEATED&quot;,
-               &quot;fields&quot;: [
-                   {
-                   &quot;name&quot;: &quot;geometry&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
-                   &quot;fields&quot;: [
-                       {
-                       &quot;name&quot;: &quot;coordinates&quot;,
-                       &quot;type&quot;: &quot;NUMERIC&quot;,
-                       &quot;mode&quot;: &quot;REPEATED&quot;,
-                       &quot;fields&quot;: []
-                       },
-                       {
-                       &quot;name&quot;: &quot;type&quot;,
-                       &quot;type&quot;: &quot;STRING&quot;,
-                       &quot;mode&quot;: &quot;NULLABLE&quot;
-                       }
-                   ]
-                   },
-                   {
-                   &quot;name&quot;: &quot;properties&quot;,
-                   &quot;type&quot;: &quot;RECORD&quot;,
-                   &quot;mode&quot;: &quot;REPEATED&quot;,
-                   &quot;fields&quot;: [
-                       {
-                       &quot;name&quot;: &quot;GoogleMapsURL&quot;,
-                       &quot;type&quot;: &quot;STRING&quot;,
-                       &quot;mode&quot;: &quot;NULLABLE&quot;
-                       },
-                       {
-                       &quot;name&quot;: &quot;Location&quot;,
-                       &quot;type&quot;: &quot;RECORD&quot;,
-                       &quot;mode&quot;: &quot;REPEATED&quot;,
-                       &quot;fields&quot;: [
-                           {
-                           &quot;name&quot;: &quot;Address&quot;,
-                           &quot;type&quot;: &quot;STRING&quot;,
-                           &quot;mode&quot;: &quot;NULLABLE&quot;
-                           },
-                           {
-                           &quot;name&quot;: &quot;BusinessName&quot;,
-                           &quot;type&quot;: &quot;STRING&quot;,
-                           &quot;mode&quot;: &quot;NULLABLE&quot;
-                           },
-                           {
-                           &quot;name&quot;: &quot;CountryCode&quot;,
-                           &quot;type&quot;: &quot;STRING&quot;,
-                           &quot;mode&quot;: &quot;NULLABLE&quot;
-                           },
-                           {
-                           &quot;name&quot;: &quot;GeoCoordinates&quot;,
-                           &quot;type&quot;: &quot;RECORD&quot;,
-                           &quot;mode&quot;: &quot;REPEATED&quot;,
-                           &quot;fields&quot;: [
-                               {
-                               &quot;name&quot;: &quot;Latitude&quot;,
-                               &quot;type&quot;: &quot;STRING&quot;,
-                               &quot;mode&quot;: &quot;NULLABLE&quot;
-                               },
-                               {
-                               &quot;name&quot;: &quot;Longitude&quot;,
-                               &quot;type&quot;: &quot;STRING&quot;,
-                               &quot;mode&quot;: &quot;NULLABLE&quot;
-                               }
-                           ]
-                           }
-                       ]
-                       },
-                       {
-                       &quot;name&quot;: &quot;Published&quot;,
-                       &quot;type&quot;: &quot;STRING&quot;,
-                       &quot;mode&quot;: &quot;NULLABLE&quot;
-                       },
-                       {
-                       &quot;name&quot;: &quot;Title&quot;,
-                       &quot;type&quot;: &quot;STRING&quot;,
-                       &quot;mode&quot;: &quot;NULLABLE&quot;
-                       },
-                       {
-                       &quot;name&quot;: &quot;Updated&quot;,
-                       &quot;type&quot;: &quot;STRING&quot;,
-                       &quot;mode&quot;: &quot;NULLABLE&quot;
-                       }
-                   ]
-                   },
-                   {
-                   &quot;name&quot;: &quot;type&quot;,
-                   &quot;type&quot;: &quot;STRING&quot;,
-                   &quot;mode&quot;: &quot;NULLABLE&quot;
-                   }
-               ]
-               }
-           ],
-       },
-       location: &apos;us-central1&apos;,
-   }
-   const datasetId = 【指定のデータセット名】
-   const tableId = &apos;TEST_TABLE&apos;
-   const [job] = await bigquery
-       .dataset(datasetId)
-       .table(tableId)
-       .load(storage.bucket(bucketName).file(`${gcsEvent.name}`), metadata)
-};
-</code></pre></li>
-</ul>
+<li><p>以下URLまたは、検索バーから「Cloud Functions」と検索し、Cloud Functionsを開きます。<br><a href="https://console.cloud.google.com/functions/" target="_blank">https://console.cloud.google.com/functions/</a>  </p>
 </li>
-<li>package.jsonを開き、dependenciesにgoogle-cloud/storageとgoogle-cloud/bigQueryを追記します。  <pre><code> {
+<li><p>『関数の作成』を選択します。
+<img src="img/section2-1.png" alt>   </p>
+</li>
+<li><p>必要なAPIの有効化が求められるので、『有効にする』を選択します。
+<img src="img/section2-2.png" alt>   </p>
+</li>
+<li><p>基本設定とトリガー設定を行い、『保存』を選択します。<br>バケットは指定のバケット名に書き換えてください。<br> <img src="img/section2-3_1.png" alt>   </p>
+</li>
+<li><p>『次へ』を選択します。<br> <img src="img/section2-3.png" alt>   </p>
+</li>
+<li><p>ランタイムは&quot;Node.js 16&quot;を選択します。  </p>
+</li>
+<li><p>index.jsを開き、以下コードに書き換えます。<br>【指定のバケット名】と【指定のデータセット名】は指定の値に書き換えます。<br>エントリポイントは、JavaScriptのプログラムに合わせ、&quot;main&quot;に変更します。<br><div class="alert alert-warning hints-alert"><div class="hints-icon"><i class="fa fa-wrench"></i></div><div class="hints-container"><p> このプログラムは、GCSに配置されたトリガー情報からファイル名を取得し、<br>指定のGCSバケットからBigQueryのテーブルにロードを行っています。<br>GCSとBigQueryのロケーションは同じである必要があります。<br>今回は&quot;us-central1&quot;で統一しています。</p>
+</div></div></p>
+<pre><code> // import
+ const { BigQuery  } = require(&apos;@google-cloud/bigquery&apos;);
+ const { Storage } = require(&apos;@google-cloud/storage&apos;);
+ const bigquery = new BigQuery();
+ const storage = new Storage();
+
+ exports.main = async (event, context) =&gt; {
+     const gcsEvent = event
+
+     // Cloud Storageのバケット名
+     const bucketName = 【指定のバケット名】
+
+     // Cloud Storageのファイル形式
+     const metadata = {
+         sourceFormat: &apos;NEWLINE_DELIMITED_JSON&apos;,
+         schema: {
+             fields: [
+                 {&quot;name&quot;: &quot;type&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                 {&quot;name&quot;: &quot;features&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                 &quot;fields&quot;: [
+                     {&quot;name&quot;: &quot;geometry&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                     &quot;fields&quot;: [
+                         {&quot;name&quot;: &quot;coordinates&quot;,&quot;type&quot;: &quot;NUMERIC&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                         &quot;fields&quot;: []},
+                         {&quot;name&quot;: &quot;type&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;}
+                     ]},
+                     {&quot;name&quot;: &quot;properties&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                     &quot;fields&quot;: [
+                         {&quot;name&quot;: &quot;GoogleMapsURL&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                         {&quot;name&quot;: &quot;Location&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                         &quot;fields&quot;: [
+                             {&quot;name&quot;: &quot;Address&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                             {&quot;name&quot;: &quot;BusinessName&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                             {&quot;name&quot;: &quot;CountryCode&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                             {&quot;name&quot;: &quot;GeoCoordinates&quot;,&quot;type&quot;: &quot;RECORD&quot;,&quot;mode&quot;: &quot;REPEATED&quot;,
+                             &quot;fields&quot;: [
+                                 {&quot;name&quot;: &quot;Latitude&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                                 {&quot;name&quot;: &quot;Longitude&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;}
+                             ]}
+                         ]},
+                         {&quot;name&quot;: &quot;Published&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                         {&quot;name&quot;: &quot;Title&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;},
+                         {&quot;name&quot;: &quot;Updated&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;}
+                     ]},
+                     {&quot;name&quot;: &quot;type&quot;,&quot;type&quot;: &quot;STRING&quot;,&quot;mode&quot;: &quot;NULLABLE&quot;}  
+         ]}],},
+         location: &apos;us-central1&apos;,
+     }
+
+     // BigQueryのデータセット名
+     const datasetId = 【指定のデータセット名】
+
+     // BigQueryのテーブル名
+     const tableId = &apos;TEST_TABLE&apos;
+
+     // BigQueryのロード実行
+     const [job] = await bigquery
+         .dataset(datasetId)
+         .table(tableId)
+         .load(storage.bucket(bucketName).file(`${gcsEvent.name}`), metadata)
+ };
+</code></pre><p> <img src="img/section2-4.png" alt>   </p>
+</li>
+<li><p>package.jsonを開き、dependenciesにgoogle-cloud/storageとgoogle-cloud/bigQueryを追記します。  </p>
+<pre><code> {
    &quot;name&quot;: &quot;sample-cloud-storage&quot;,
    &quot;version&quot;: &quot;0.0.1&quot;,
    &quot;dependencies&quot;: {
@@ -385,34 +325,52 @@ exports.main = async (event, context) =&gt; {
      &quot;@google-cloud/bigquery&quot;: &quot;^5.10.0&quot;
    }
  }
-</code></pre> <img src="img/section2-5.png" alt>   </li>
-<li>『デプロイ』を選択し、デプロイされるのを待ちます。約１分ほどでデプロイが完了します。<br><img src="img/section2-6.png" alt>  </li>
+</code></pre><p> <img src="img/section2-5.png" alt>   </p>
+</li>
+<li>『デプロイ』を選択し、デプロイされるのを待ちます。<br>約１分ほどでデプロイが完了します。<br><img src="img/section2-6.png" alt>  </li>
 </ol>
-<h2 id="テストデータの作成">3. テストデータの作成</h2>
+<h2 id="テストデータの作成">2. テストデータの作成</h2>
 <ol>
-<li>GoogleMapを開きます。<br><a href="https://www.google.co.jp/maps" target="_blank">https://www.google.co.jp/maps</a>  </li>
-<li>お気に入りの場所を選択し、『スター付き』を選択します。<br> <img src="img/section2-7.png" alt>   </li>
-<li>複数スターを付けていきます。  </li>
-<li>Googleデータエクスポートを開きます。<br><a href="https://takeout.google.com/settings/takeout" target="_blank">https://takeout.google.com/settings/takeout</a><br>「選択をすべて解除」選択し、「マップ（マイプレイス）」のみ選択します。<br> <img src="img/section2-8.png" alt>   </li>
-<li>「次のステップ」　＞　「エクスポート作成」をクリックします。  </li>
-<li>「ダウンロード」をクリックします。  </li>
-<li>ダウンロードしたZIPファイルを解凍し、JSON形式でスターを付けた情報が存在することを確認します。  </li>
+<li><p>GoogleMapを開きます。<br><a href="https://www.google.co.jp/maps" target="_blank">https://www.google.co.jp/maps</a>  </p>
+</li>
+<li><p>お気に入りの場所を選択し、『スター付き』を選択します。<br> <img src="img/section2-7.png" alt>   </p>
+</li>
+<li><p>複数スターを付けていきます。  </p>
+</li>
+<li><p>Googleデータエクスポートを開きます。<br><a href="https://takeout.google.com/settings/takeout" target="_blank">https://takeout.google.com/settings/takeout</a><br>「選択をすべて解除」選択し、「マップ（マイプレイス）」のみ選択します。<br> <img src="img/section2-8.png" alt>   </p>
+</li>
+<li><p>「次のステップ」　＞　「エクスポート作成」をクリックします。  </p>
+</li>
+<li><p>「ダウンロード」をクリックします。  </p>
+</li>
+<li><p>ダウンロードしたZIPファイルを解凍し、JSON形式でスターを付けた情報が存在することを確認します。  </p>
+</li>
 <li><p>ダウンロードしたJSONデータですがカラム名にスペースが混在しており、BigQueryとしては都合が悪いため、置換して削除します。<br>以下コマンドをGitBash等のTerminalで実行します。</p>
 <pre><code> cd *JSONデータをダウンロードしたディレクトリ
 
  sed -z &apos;s/\n//g&apos; 保存した場所.json | sed -z &apos;s/Google Maps URL/GoogleMapsURL/g&apos; | sed -z &apos;s/Business Name/BusinessName/g&apos; | sed -z &apos;s/Geo Coordinates/GeoCoordinates/g&apos; | sed -z &apos;s/Country Code/CountryCode/g&apos; &gt; test_data.json
-</code></pre><p> ※今回は上記JSONデータをコチラで用意していますので、以下リンクよりダウンロードください。<br>   ダウンロードリンク：<a href="https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing</a></p>
-<h2 id="テストデータを登録する">4. テストデータを登録する</h2>
-</li>
-<li><p>GCSを開きます。<br><a href="https://console.cloud.google.com/storage/browser" target="_blank">https://console.cloud.google.com/storage/browser</a>  </p>
-</li>
-<li><p>先ほどのプログラムに記述したバケット名を選択します。</p>
-</li>
-<li>『ファイルをアップロード』を選択し、&quot;test_data.json&quot;をアップロードします。<br>アップロード完了後、作成したCloud Functionがアップロードされたファイルをトリガーに、BigQueryに登録されます。<br> <img src="img/section2-9.png" alt>   </li>
-<li>BigQueryを開き、SQLエディターから、テストデータが登録されているかを確認します。<br><a href="https://console.cloud.google.com/bigquery" target="_blank">https://console.cloud.google.com/bigquery</a><pre><code> SELECT * FROM *指定のデータセット名.TEST_TABLE
-</code></pre> <img src="img/section2-10.png" alt>   </li>
+</code></pre><p> ※今回は上記JSONデータをコチラで用意していますので、以下リンクよりダウンロードください。<br>   ダウンロードリンク：<br>   <a href="https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing</a><br> 追加のデータには、以下２つの住所情報が入っています。</p>
+<pre><code> - 東京スカイツリー
+ - 東京タワー
+</code></pre></li>
 </ol>
-<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#データ登録機能作成">データ登録機能作成</a></p><li><a href="#_">1.  </a></li><li><a href="#テストデータ登録機能を作成する">2. テストデータ登録機能を作成する</a></li><li><a href="#テストデータの作成">3. テストデータの作成</a></li><li><a href="#テストデータを登録する">4. テストデータを登録する</a></li></ul></div><a href="#_" id="goTop"><i class="fa fa-arrow-up"></i></a>
+<h2 id="テストデータを登録する">3. テストデータを登録する</h2>
+<ol>
+<li><p>以下URLまたは、検索バーから「Cloud Stroage」と検索し、Cloud Stroageを開きます。<br><a href="https://console.cloud.google.com/storage/browser" target="_blank">https://console.cloud.google.com/storage/browser</a>  </p>
+</li>
+<li><p>先ほどのプログラムに書き加えたバケット名を選択します。</p>
+</li>
+<li><p>『ファイルをアップロード』を選択し、&quot;test_data1.json&quot;をアップロードします。<br>アップロード完了後、作成したCloud Functionsがアップロードされたファイルをトリガーに、BigQueryへ登録されます。<br> <img src="img/section2-9.png" alt>   </p>
+</li>
+<li><p>以下URLまたは、検索バーから「BigQuery」と検索し、BigQueryを開きます。
+<a href="https://console.cloud.google.com/bigquery" target="_blank">https://console.cloud.google.com/bigquery</a></p>
+</li>
+<li><p>『クエリを新規作成』を選択し、<br>SQLエディターから、SELECT文を実行しテストデータが登録されているかを確認します。  </p>
+<pre><code> SELECT * FROM *指定のデータセット名.TEST_TABLE
+</code></pre><p> <img src="img/section2-10.png" alt>   </p>
+</li>
+</ol>
+<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#データ登録機能作成">データ登録機能作成</a></p><li><a href="#テストデータ登録機能を作成する">1. テストデータ登録機能を作成する</a></li><li><a href="#テストデータの作成">2. テストデータの作成</a></li><li><a href="#テストデータを登録する">3. テストデータを登録する</a></li></ul></div><a href="#テストデータ登録機能を作成する" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
                                 </section>
                             
@@ -455,7 +413,7 @@ exports.main = async (event, context) =&gt; {
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"1. データ登録機能作成","level":"1.3","depth":1,"next":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"previous":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section2.md","mtime":"2022-05-02T09:18:48.873Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-02T09:50:36.999Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"1. データ登録機能作成","level":"1.3","depth":1,"next":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"previous":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section2.md","mtime":"2022-05-03T02:02:25.199Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T02:05:11.149Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

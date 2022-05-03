@@ -1,65 +1,66 @@
 # 検索機能作成  
-この手順では、BigQueryを検索するプログラムをJavaScriptで作成します。  
-また、作成したプログラムはNode.Jsで実行するため、サーバーレスで実行可能なCloud Funcitonにデプロイしていきます。  
+BigQueryに登録したデータを検索するプログラムをします。  
+検索条件はリクエストパラメータで渡すようにし、緯度経度情報を検索結果として取得します。  
+実行環境はCloud Functionsです。  
 
-![](img/mirameetvol30.drawio_2.png) 
 ----
+  
+![](img/mirameetvol30.drawio_2.png) 
+  
 ## 検索機能を作成する
-1. Cloud Functionを開きます。  
+1. 以下URLまたは、検索バーから「Cloud Functions」と検索し、Cloud Functionsを開きます。  
 https://console.cloud.google.com/functions/  
-2. 『関数の作成』を選択します。
-3. 以下設定内容で、基本設定とトリガー設定を行います。  
-※以下以外は全てデフォルト設定
 
-    |  設定項目  |  設定値  |
-    | ---- | ---- |
-    |  環境  |  第１世代  |
-    |  関数名  |  bigquerySelect  |
-    |  リージョン  |  us-central1  |
-    |  トリガータイプ  |  HTTP  |
+2. 『関数の作成』を選択します。  
 
-4. 『保存』→『次へ』を選択します。 
+3. 基本設定とトリガー設定を行い、『保存』を選択します。  
+    ![](img/section3-1_1.png)
+
+4. 『次へ』を選択します。 
     ![](img/section3-1.png)   
+
 5. ランタイムは"Node.js 16"を選択します。
+
 6. index.jsを開き、以下コードに書き換えます。  
 エントリポイントは、JavaScriptのプログラムに合わせ、"main"に変更します。  
-このプログラムは、リクエストパラメータを条件に、SELECT文を作成し、BigQuery APIを用いてBigQueryのデータを検索しています。  
-検索結果はレスポンス情報として、返却します。  
-    ![](img/section3-2.png)   
-   - ソースコード
+{% hint style='working' %} このプログラムは、リクエストパラメータを条件に、SELECT文を作成し、BigQuery APIを用いてBigQueryのデータを検索しています。  
+検索条件はBusinessNameです。検索結果は、緯度・経度情報を取得します。  
+検索結果はレスポンス情報として、返却します。{% endhint %}
+
     ```
+    // import
     const { BigQuery } = require('@google-cloud/bigquery');
     const bigquery = new BigQuery();
-
+      
     exports.main = (req, res) => {
-        
-        let query = "SELECT "+
-                    "  Latitude,Longitude "+
+
+        // SQL文作成
+        let query = "SELECT Latitude,Longitude "+
                     "FROM ( "+
-                    "  SELECT "+
-                    "    GeoCoordinates "+
+                    "  SELECT GeoCoordinates "+
                     "  FROM ( "+
-                    "    SELECT "+
-                    "      Location "+
+                    "    SELECT Location "+
                     "    FROM ( "+
-                    "      SELECT"+
-                    "        properties"+
-                    "      FROM 【指定のデータセット名】.TEST_TABLE"+
-                    "      ,UNNEST(features)"+
+                    "      SELECT properties "+
+                    "      FROM 【指定のデータセット名】.TEST_TABLE "+
+                    "      ,UNNEST(features) "+
                     "    ),UNNEST(properties) "+
                     "  ),UNNEST(Location) ";
         if (req.query.address != null) {
-            query = query + " WHERE BusinessName LIKE '%" + req.query.address + "%' ),UNNEST(GeoCoordinates) LIMIT 1";
+            query = query + 
+                    " WHERE BusinessName LIKE '%" + req.query.address +
+                    "%' ),UNNEST(GeoCoordinates) LIMIT 1";
         } else {
             query = query + " ),UNNEST(GeoCoordinates) LIMIT 1";
         }
-
-        //with options
+          
+        // SQLオプション設定
         const options = {
             query: query,
-            useLegacySql: true,
+            useLegacySql: false,
         };
-        
+          
+        // SELECT実行
         bigquery.createQueryJob(options)
             .then(results => {
                 const [job] = results;
@@ -76,7 +77,9 @@ https://console.cloud.google.com/functions/
             });
     }
     ```
-7. package.jsonを開き、dependenciesにgoogle-cloud/bigQueryを追記します。
+    ![](img/section3-2.png)  
+
+1. package.jsonを開き、dependenciesにgoogle-cloud/bigQueryを追記します。
     ```
     {
       "name": "sample-http",
@@ -87,17 +90,25 @@ https://console.cloud.google.com/functions/
     }
     ```
     ![](img/section3-3.png)   
-8.  『デプロイ』を選択し、デプロイされるのを待ちます。約１分ほどでデプロイが完了します。
-9.  作成したCloud Function を選択します。
+2.  『デプロイ』を選択し、デプロイされるのを待ちます。  
+約１分ほどでデプロイが完了します。
+
+3.  作成したCloud Function を選択します。
     ![](img/section3-4.png)   
-10. 権限から『追加』を選択します。  
-alluserで"Cloud Function開発者"の権限を付け、『保存』を選択します。  
+
+4.   画面からのアクセスを許可します。  
+『権限』タブから『追加』を選択し、alluserで"Cloud Functions開発者"の権限を付け、  
+『保存』を選択します。  
 "リソースの一般公開"の確認が求められるので、『一般アクセスを許可』を選択します。  
     ![](img/section3-5.png)   
     ![](img/section3-6.png)   
 
 ## 動作確認
-1. 作成したCloud Function を選択し、トリガーURLから動作確認をします。  
+1. 『トリガー』タブから、『トリガーURL』を選択して動作確認をします。  
     ![](img/section3-7.png)   
-2. リクエストパラメータがBigQueryの検索条件になりますが、条件にヒットしない場合、NULLが返却されていることがわかります。  
+
+2. テストデータはスカイツリーと、東京タワーの二つが登録されているので、  
+リクエストパラメータに"?address=スカイツリー"のように検索値を渡すことで、  
+BigQueryの検索結果が変わることが確認できます。。  
+また、テストデータの存在しない条件の場合は、NULLが返却されていることがわかります。  
     ![](img/section3-8.png) 

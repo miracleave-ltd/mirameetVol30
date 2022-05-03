@@ -231,19 +231,20 @@
                                 
                                 <h1 id="はじめに"><a name="はじめに" class="plugin-anchor" href="#はじめに"><i class="fa fa-link" aria-hidden="true"></i></a>はじめに</h1>
 <h2 id="今回のゴール">1. 今回のゴール</h2>
-<p>BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。<br>データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionを使用していきます<br>今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。<br>PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。<br><img src="img/mirameetvol30.drawio_0.png" alt> </p>
+<p>BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  </p>
+<p>データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionを使用していきます<br>今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。<br>PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。<br><img src="img/mirameetvol30.drawio_0.png" alt> </p>
 <p>使用する技術要素については、以下となります。<br>※ページの最後に、技術要素の参考サイトを記載しています。  </p>
 <ul>
 <li>フロントエンド<ul>
 <li>TypeScript</li>
 <li>Node.js</li>
-<li>Cloud Shell Editer（開発環境兼、localhosの実行環境）</li>
+<li>Cloud Shell Editer（開発環境兼、実行環境）</li>
 </ul>
 </li>
 <li>バックエンド<ul>
 <li>JavaScript</li>
 <li>Node.js</li>
-<li>Cloud Function（サーバーレス）</li>
+<li>Cloud Functions（サーバーレス）</li>
 </ul>
 </li>
 <li>API<ul>
@@ -280,7 +281,7 @@
 </li>
 <li><a href="https://cloud.google.com/bigquery/docs/reference/libraries-overview" target="_blank">BigQuery API</a></li>
 <li><a href="https://cloud.google.com/storage/docs/apis?hl=ja" target="_blank">Cloud Storage API</a></li>
-<li><a href="https://cloud.google.com/functions/docs/concepts/overview?hl=ja" target="_blank">Cloud Function</a></li>
+<li><a href="https://cloud.google.com/functions/docs/concepts/overview?hl=ja" target="_blank">Cloud Functions</a></li>
 </ul>
 <div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#はじめに">はじめに</a></p><li><a href="#今回のゴール">1. 今回のゴール</a></li><li><a href="#事前に準備頂きたいこと">2. 事前に準備頂きたいこと</a></li><li><a href="#手順">3. 手順</a></li><li><a href="#技術要素">4. 技術要素</a></li></ul></div><a href="#今回のゴール" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
@@ -321,7 +322,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"はじめに","level":"1.1","depth":1,"next":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"README.md","mtime":"2022-05-02T09:44:15.024Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-02T09:50:36.999Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"はじめに","level":"1.1","depth":1,"next":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"README.md","mtime":"2022-05-03T00:47:09.391Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T02:05:11.149Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
