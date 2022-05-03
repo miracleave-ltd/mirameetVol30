@@ -1,7 +1,7 @@
 # データ登録機能作成  
 テストデータは、JSON形式のデータを使用します。  
-テストデータはBigQueryに自動で取り込めるよう、Cloud Storageに配置し、  
-配置されたことトリガーとして、プログラムでBigQueryに自動登録するようにします。  
+テストデータはBigQueryに自動で取り込めるようにするため、Cloud Storageに配置されたファイルを  
+トリガーとして、プログラムでBigQueryに自動登録するようにします。  
 実行環境はCloud Functionsです。  
 
 ----
@@ -117,6 +117,18 @@ GCSとBigQueryのロケーションは同じである必要があります。
     ![](img/section2-6.png)  
 
 ## テストデータの作成  
+※以下手順はテストデータの作成手順ですが、  
+　今回のハンズオンでは弊社側で用意したテストデータをお渡ししますので、そちらを利用ください。  
+　このJSONデータには、以下２つの住所情報が入っています。  
+
+
+  [ダウンロードリンク](https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing)  
+
+- 東京スカイツリー
+- 東京タワー
+
+----
+
 1. GoogleMapを開きます。  
 https://www.google.co.jp/maps  
 
@@ -143,12 +155,6 @@ https://takeout.google.com/settings/takeout
 
     sed -z 's/\n//g' 保存した場所.json | sed -z 's/Google Maps URL/GoogleMapsURL/g' | sed -z 's/Business Name/BusinessName/g' | sed -z 's/Geo Coordinates/GeoCoordinates/g' | sed -z 's/Country Code/CountryCode/g' > test_data.json
     ```
-    ※今回は上記JSONデータをコチラで用意していますので、以下リンクよりダウンロードください。  
-      ダウンロードリンク：  
-      https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing  
-    追加のデータには、以下２つの住所情報が入っています。
-        - 東京スカイツリー
-        - 東京タワー
 
 ## テストデータを登録する
 1. 以下URLまたは、検索バーから「Cloud Stroage」と検索し、Cloud Stroageを開きます。    

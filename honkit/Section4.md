@@ -46,12 +46,14 @@ https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2
     let mapOptions;
     let data = new Array();
 
-    // Cloud FunctionのSELECT結果取得
+    // Cloud FunctionsのSELECT結果取得
     fetch(triggerUrl)
     .then(response => {
         console.log(response.status);
         response.json().then(userInfo => {
             for (var i = 0; i < userInfo.length; i++) {
+
+                // MapAPIのオプション設定
                 mapOptions = {
                     tilt: 0,
                     heading: 0,
@@ -145,7 +147,7 @@ https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2
     ![](img/section4-5.png)   
 
 ## スタイルの変更
-1. Google Map JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。  
+1. GoogleMap JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。  
 以下、URLにアクセスし、マップIDを作成します。  
 https://console.cloud.google.com/google/maps-apis/studio/maps
 
@@ -155,7 +157,7 @@ https://console.cloud.google.com/google/maps-apis/studio/maps
 3. 以下設定内容で、『保存』を選択します。
     ![](img/section4-7_1.png)   
 
-4. 次に、スタイルを作成します。  
+4. スタイルを作成します。  
 左メニューから『地図のスタイル』を選択し、『スタイルを作成』を選択します。
     ![](img/section4-7.png)   
 
@@ -165,23 +167,24 @@ https://console.cloud.google.com/google/maps-apis/studio/maps
     ![](img/section4-8_1.png)  
     ![](img/section4-8.png)   
 
-6. 『ADD MAP IDS』を選択し、先ほどのマップIDに紐づけます。
+1. 『ADD MAP IDS』を選択し、先ほど作成したマップIDに紐づけます。
     ![](img/section4-9.png)   
 
-7. 左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。  
+2. 左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。  
     ![](img/section4-10.png)   
 
-8. index.tsを開き、mapOptionsのmapIdに設定し、保存します。
+3. index.tsを開き、mapOptionsのmapIdに作成したマップIDに書き換え、保存します。
     ![](img/section4-11.png)   
 
 ## 一連の動作確認
-1. スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。  
-    ※追加のJSONデータをコチラで用意していますので、以下リンクよりダウンロードください。  
-      ダウンロードリンク：https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing  
-    追加のデータには、以下３つの住所情報が入っています。
-        - ディズニーランド
-        - ユニバーサルスタジオジャパン
-        - エトワール凱旋門
+1. スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、  
+一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。  
+追加のJSONデータは、以下リンクよりダウンロードください。   
+以下３つの住所情報が入っています。  
+[ダウンロードリンク](https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing)    
+   - ディズニーランド
+   - ユニバーサルスタジオジャパン
+   - エトワール凱旋門
 
 
 2. "http://localhost:300x/" を開き、スタイルが反映されていることを確認します。  
