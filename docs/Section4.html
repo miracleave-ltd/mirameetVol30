@@ -232,159 +232,166 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="Map画面作成"><a name="map画面作成" class="plugin-anchor" href="#map画面作成"><i class="fa fa-link" aria-hidden="true"></i></a>Map画面作成</h1>
-<p>この手順では、GoogleMapJavaSciriptAPIを使い、BigQueryの情報を絞り込んでピン止めするプログラムを作成してきます。<br>また、開発したプログラムはCloud Shell Editerで実行し、動作確認をしていきます。  </p>
-<h2 id="_">1.  </h2>
-<h2 id="ソースコードの取得">2. ソースコードの取得</h2>
+<p>この手順では、GoogleMapJavaSciriptAPIを使い、<br>BigQueryの情報を絞り込んでピン止めするプログラムを作成してきます。<br>開発環境と実行環境はCloud Shell Editerです。  </p>
+<hr>
+<p><img src="img/mirameetvol30.drawio_3.png" alt> </p>
+<h2 id="ソースコードの取得">1. ソースコードの取得</h2>
 <ol>
-<li>以下URLより、GoogleのSampleコードを取得します。<br><a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglemaps%2Fjs-samples&amp;cloudshell_git_branch=sample-threejs-overlay-simple&amp;cloudshell_tutorial=cloud_shell_instructions.md&amp;cloudshell_workspace=.&amp;hl=ja" target="_blank">https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglemaps%2Fjs-samples&amp;cloudshell_git_branch=sample-threejs-overlay-simple&amp;cloudshell_tutorial=cloud_shell_instructions.md&amp;cloudshell_workspace=.&amp;hl=ja</a>  </li>
-<li>Cloud Shellの説明が表示されたら、『続行』を選択します。</li>
-<li>Cloneするソースコードのリポジトリの確認が求められたら、『確認』を選択します。
- <img src="img/section4-1.png" alt>   </li>
-<li>Cloud Shell Editerが起動され、Smapleコードのプロジェクトが開いていることを確認します。
- <img src="img/section4-2.png" alt>   </li>
+<li><p>以下URLより、Google社が提供しているSampleコードを取得します。<br><a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglemaps%2Fjs-samples&amp;cloudshell_git_branch=sample-threejs-overlay-simple&amp;cloudshell_tutorial=cloud_shell_instructions.md&amp;cloudshell_workspace=.&amp;hl=ja" target="_blank">https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fgooglemaps%2Fjs-samples&amp;cloudshell_git_branch=sample-threejs-overlay-simple&amp;cloudshell_tutorial=cloud_shell_instructions.md&amp;cloudshell_workspace=.&amp;hl=ja</a>  </p>
+</li>
+<li><p>Cloud Shell Editerが起動され、説明文が表示されます。<br>『続行』を選択します。</p>
+</li>
+<li><p>Cloneするソースコードのリポジトリの確認が求められたら、『確認』を選択します。
+ <img src="img/section4-1.png" alt>   </p>
+</li>
+<li><p>Cloud Shell Editerが起動され、Smapleコードのプロジェクトが開いていることを確認します。
+ <img src="img/section4-2.png" alt>   </p>
+</li>
 </ol>
-<h2 id="Map画面を作成する。">3. Map画面を作成する。</h2>
+<h2 id="Map画面を作成する。">2. Map画面を作成する。</h2>
 <ol>
-<li><p>Cloud Shell Editerからindex.tsを開き、以下コードに書き換えます。<br>ソースコードの【トリガーURL】の部分は、Cloud Functionで作成したbigquerySelectのトリガーURLを記載します。<br>このプログラムは、手順[2.]で作成したAPIを呼び出し、検索結果をGoogle Map JavaScrit APIに反映しています。<br>Google Map JavaScript APIの設定オプションは今回はデフォルトで行います。<br>※バックエンド機能がJavaScriptに対し、フロントはTypeScriptですが深い意味はありません。<br> <img src="img/section4-3.png" alt>   </p>
-<ul>
-<li><p>ソースコード</p>
-<pre><code>import * as THREE from &quot;three&quot;;
-import { GLTFLoader } from &quot;three/examples/jsm/loaders/GLTFLoader&quot;;
-import { ThreeJSOverlayView } from &quot;@googlemaps/three&quot;;
+<li><p>Cloud Shell Editerからindex.tsを開き、以下コードに書き換えます。<br>ソースコードの【トリガーURL】の部分は、<br>手順[2.]のCloud Functionsで作成したbigquerySelectのトリガーURLを記載します。<br><div class="alert alert-warning hints-alert"><div class="hints-icon"><i class="fa fa-wrench"></i></div><div class="hints-container"><p> このプログラムは、トリガーURLにアクセスし、<br>検索結果を取得出来たらGoogleMap JavaScrit APIを使って画面描写をしています。
+このソースコードには、GoogleMap JavaScript APIの各設定オプションがありますので、<br>表示方法を変えたい場合は設定オプションを変更することでレイアウトを変更できます。</p>
+</div></div></p>
+<pre><code> // import
+ import * as THREE from &quot;three&quot;;
+ import { GLTFLoader } from &quot;three/examples/jsm/loaders/GLTFLoader&quot;;
+ import { ThreeJSOverlayView } from &quot;@googlemaps/three&quot;;
+ let map: google.maps.Map;
 
-let map: google.maps.Map;
+ function initMap(): void {
+ let url = new URL(window.location.href);
+ let params = url.searchParams;
+ let triggerUrl=`【トリガーURL】`;
+ if (params.get(&apos;address&apos;) != null) {
+     triggerUrl=triggerUrl+`?address=`+params.get(&apos;address&apos;);
+ } 
+ let mapOptions;
+ let data = new Array();
 
-function initMap(): void {
-   let url = new URL(window.location.href);
-   let params = url.searchParams;
-   let triggerUrl=`【トリガーURL】`;
-   if (params.get(&apos;address&apos;) != null) {
-       triggerUrl=triggerUrl+`?address=`+params.get(&apos;address&apos;);
-   } 
-   let mapOptions;
-   let data = new Array();
-   fetch(triggerUrl)
-   .then(response =&gt; {
-       console.log(response.status);
-       response.json().then(userInfo =&gt; {
-           for (var i = 0; i &lt; userInfo.length; i++) {
-               mapOptions = {
-                   tilt: 0,
-                   heading: 0,
-                   zoom: 18,
-                   center: { lat: Number(userInfo[i].Latitude), lng: Number(userInfo[i].Longitude) },
-                   mapId: &quot;15431d2b469f209e&quot;,
-                   disableDefaultUI: true,
-                   gestureHandling: &quot;none&quot;,
-                   keyboardShortcuts: true,
-               };
-               const mapDiv = document.getElementById(&quot;map&quot;) as HTMLElement;
+ // Cloud FunctionのSELECT結果取得
+ fetch(triggerUrl)
+ .then(response =&gt; {
+     console.log(response.status);
+     response.json().then(userInfo =&gt; {
+         for (var i = 0; i &lt; userInfo.length; i++) {
+             mapOptions = {
+                 tilt: 0,
+                 heading: 0,
+                 zoom: 18,
+                 center: { lat: Number(userInfo[i].Latitude), lng: Number(userInfo[i].Longitude) },
+                 mapId: &quot;15431d2b469f209e&quot;,
+                 disableDefaultUI: true,
+                 gestureHandling: &quot;none&quot;,
+                 keyboardShortcuts: true,
+             };
+             const mapDiv = document.getElementById(&quot;map&quot;) as HTMLElement;
+             map = new google.maps.Map(mapDiv, mapOptions);
+             const scene = new THREE.Scene();
+             const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+             scene.add(ambientLight);
+             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
+             directionalLight.position.set(0, 10, 50);
+             scene.add(directionalLight);
 
-               map = new google.maps.Map(mapDiv, mapOptions);
+             // Load the model.
+             const loader = new GLTFLoader();
+             const url =
+                 &quot;https://raw.githubusercontent.com/googlemaps/js-samples/main/assets/pin.gltf&quot;;
 
-               const scene = new THREE.Scene();
+             loader.load(url, (gltf) =&gt; {
+                 gltf.scene.scale.set(10, 10, 10);
+                 gltf.scene.rotation.x = Math.PI / 2;
+                 scene.add(gltf.scene);
+                 let { tilt, heading, zoom } = mapOptions;
 
-               const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+                 const animate = () =&gt; {
+                 if (tilt &lt; 67.5) {
+                     tilt += 0.5;
+                 } else if (heading &lt;= 360) {
+                     heading += 0.2;
+                     zoom -= 0.0005;
+                 } else {
+                     // exit animation loop
+                     return;
+                 }
 
-               scene.add(ambientLight);
+                 map.moveCamera({ tilt, heading, zoom });
+                 requestAnimationFrame(animate);
+                 };   
+                 requestAnimationFrame(animate);
+             });
+             new ThreeJSOverlayView({
+                 map,
+                 scene,
+                 anchor: { ...mapOptions.center, altitude: 100 },
+                 THREE,
+             });
+         };
+     });
+ });
+ }
 
-               const directionalLight = new THREE.DirectionalLight(0xffffff, 0.25);
-
-               directionalLight.position.set(0, 10, 50);
-               scene.add(directionalLight);
-
-               // Load the model.
-               const loader = new GLTFLoader();
-               const url =
-                   &quot;https://raw.githubusercontent.com/googlemaps/js-samples/main/assets/pin.gltf&quot;;
-
-               loader.load(url, (gltf) =&gt; {
-                   gltf.scene.scale.set(10, 10, 10);
-                   gltf.scene.rotation.x = Math.PI / 2;
-                   scene.add(gltf.scene);
-
-                   let { tilt, heading, zoom } = mapOptions;
-
-                   const animate = () =&gt; {
-                   if (tilt &lt; 67.5) {
-                       tilt += 0.5;
-                   } else if (heading &lt;= 360) {
-                       heading += 0.2;
-                       zoom -= 0.0005;
-                   } else {
-                       // exit animation loop
-                       return;
-                   }
-
-                   map.moveCamera({ tilt, heading, zoom });
-
-                   requestAnimationFrame(animate);
-                   };
-
-                   requestAnimationFrame(animate);
-               });
-
-               new ThreeJSOverlayView({
-                   map,
-                   scene,
-                   anchor: { ...mapOptions.center, altitude: 100 },
-                   THREE,
-               });
-           };
-       });
-   });
-}
-
-declare global {
-interface Window {
-   initMap: () =&gt; void;
-}
-}
-window.initMap = initMap;
-export { initMap };
-</code></pre></li>
-</ul>
+ declare global {
+ interface Window {
+ initMap: () =&gt; void;
+ }
+ }
+ window.initMap = initMap;
+ export { initMap };
+</code></pre><p> <img src="img/section4-3.png" alt>   </p>
 </li>
-<li>ターミナルから、以下コマンドを実行し、npmを初期化します。<pre><code> npm i
-</code></pre><h2 id="動作確認">4. 動作確認</h2>
-</li>
-<li>ターミナルから、以下コマンドを実行します。  <pre><code> npm start
+<li><p>ターミナルから、以下コマンドを実行し、npmを初期化します。</p>
+<pre><code> npm i
 </code></pre></li>
-<li>ターミナル上の実行ログに表示される&quot;<a href="http://localhost:300x/&quot;をクリックし、動作確認を行います。" target="_blank">http://localhost:300x/&quot;をクリックし、動作確認を行います。</a><br>※port（300x）は人によって異なります。<br> <img src="img/section4-4.png" alt>   </li>
-<li>リクエストパラメーターにaddressを付け加え、検索条件値を入れて条件を絞ってみましょう。<br>検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。<br>※【URL】の部分は各GCPアカウントによって異なります。  <pre><code> https://【URL】&amp;address=東京タワー
- https://【URL】&amp;address=スカイツリー
-</code></pre> <img src="img/section4-5.png" alt>   </li>
 </ol>
-<h2 id="スタイルの変更">5. スタイルの変更</h2>
+<h2 id="動作確認">3. 動作確認</h2>
 <ol>
-<li>Google Map JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。<br>以下、URLにアクセスし、レイアウトを作成する場合はマップIDを作成します。<br><a href="https://console.cloud.google.com/google/maps-apis/studio/maps" target="_blank">https://console.cloud.google.com/google/maps-apis/studio/maps</a></li>
-<li>『マップIDを作成』を選択します。<br> <img src="img/section4-6.png" alt>   </li>
-<li>以下設定内容で、『保存』を選択します。
- |  設定項目  |  設定値  |
- | ---- | ---- |
- |  環境  |  第１世代  |
- |  名前  |  任意  |
- |  地図の種類  |  JavaScript  |
- |  地図の種類  |  ラスター  |</li>
-<li>次に、スタイルを作成します。<br>左メニューから『地図のスタイル』を選択し、『スタイルを作成』を選択します。
- <img src="img/section4-7.png" alt>   </li>
-<li>中央にあるバリエーションから任意のレイアウトを選択し、スタイルの名前を入力して『保存』を選択します。<br>※デフォルトでもOKです。<br> <img src="img/section4-8.png" alt>   </li>
-<li>『ADD MAP IDS』を選択し、先ほどのマップIDに紐づけます。
- <img src="img/section4-9.png" alt>   </li>
-<li>左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。<br> <img src="img/section4-10.png" alt>   </li>
-<li>index.tsを開き、mapOptionsのmapIdに設定し、保存します。
- <img src="img/section4-11.png" alt>   <h2 id="一連の動作確認">6. 一連の動作確認</h2>
+<li>ターミナルから、以下コマンドを実行し、アプリケーションを起動します。  <pre><code> npm start
+</code></pre></li>
+<li><p>ターミナル上の実行ログに表示される &quot;<a href="http://localhost:300x/" target="_blank">http://localhost:300x/</a>&quot; を<br>クリック（またはCtrl + クリック）し、  動作確認を行います。<br>※port（300x）は人によって異なります。<br> <img src="img/section4-4.png" alt>   </p>
 </li>
-<li>スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。<br> ※追加のJSONデータをコチラで用意していますので、以下リンクよりダウンロードください。<br>   ダウンロードリンク：<a href="https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing</a>
- 追加のデータには、以下３つの住所情報は入っています。<pre><code> - ディズニーランド
+<li><p>リクエストパラメーターを付け加え、検索条件値を入れて条件を絞ってみましょう。<br>検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。<br>※【URL】の部分は各GCPアカウントによって異なります。  </p>
+<pre><code> 例）
+ 　https://【URL】&amp;address=東京タワー
+ 　https://【URL】&amp;address=スカイツリー
+</code></pre><p> <img src="img/section4-5.png" alt>   </p>
+</li>
+</ol>
+<h2 id="スタイルの変更">4. スタイルの変更</h2>
+<ol>
+<li><p>Google Map JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。<br>以下、URLにアクセスし、マップIDを作成します。<br><a href="https://console.cloud.google.com/google/maps-apis/studio/maps" target="_blank">https://console.cloud.google.com/google/maps-apis/studio/maps</a></p>
+</li>
+<li><p>『マップIDを作成』を選択します。<br> <img src="img/section4-6.png" alt>   </p>
+</li>
+<li><p>以下設定内容で、『保存』を選択します。
+ <img src="img/section4-7_1.png" alt>   </p>
+</li>
+<li><p>次に、スタイルを作成します。<br>左メニューから『地図のスタイル』を選択し、『スタイルを作成』を選択します。
+ <img src="img/section4-7.png" alt>   </p>
+</li>
+<li><p>バリエーションから任意のレイアウトを選択し、<br>スタイルの名前を入力して『保存』を選択します。<br>※デフォルトでもOKです。<br> <img src="img/section4-8_1.png" alt><br> <img src="img/section4-8.png" alt>   </p>
+</li>
+<li><p>『ADD MAP IDS』を選択し、先ほどのマップIDに紐づけます。
+ <img src="img/section4-9.png" alt>   </p>
+</li>
+<li><p>左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。<br> <img src="img/section4-10.png" alt>   </p>
+</li>
+<li><p>index.tsを開き、mapOptionsのmapIdに設定し、保存します。
+ <img src="img/section4-11.png" alt>   </p>
+</li>
+</ol>
+<h2 id="一連の動作確認">5. 一連の動作確認</h2>
+<ol>
+<li>スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。<br> ※追加のJSONデータをコチラで用意していますので、以下リンクよりダウンロードください。<br>   ダウンロードリンク：<a href="https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing</a><br> 追加のデータには、以下３つの住所情報が入っています。<pre><code> - ディズニーランド
  - ユニバーサルスタジオジャパン
  - エトワール凱旋門
 </code></pre></li>
 </ol>
 <ol>
-<li>&quot;<a href="http://localhost:300x/&quot;を開き、スタイルが反映されていることを確認します。" target="_blank">http://localhost:300x/&quot;を開き、スタイルが反映されていることを確認します。</a><br>※port（300x）は人によって異なります。  </li>
+<li>&quot;<a href="http://localhost:300x/" target="_blank">http://localhost:300x/</a>&quot; を開き、スタイルが反映されていることを確認します。<br>※port（300x）は人によって異なります。<br> <img src="img/section4-12.png" alt>   </li>
 </ol>
-<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#Map画面作成">Map画面作成</a></p><li><a href="#_">1.  </a></li><li><a href="#ソースコードの取得">2. ソースコードの取得</a></li><li><a href="#Map画面を作成する。">3. Map画面を作成する。</a></li><li><a href="#動作確認">4. 動作確認</a></li><li><a href="#スタイルの変更">5. スタイルの変更</a></li><li><a href="#一連の動作確認">6. 一連の動作確認</a></li></ul></div><a href="#_" id="goTop"><i class="fa fa-arrow-up"></i></a>
+<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#Map画面作成">Map画面作成</a></p><li><a href="#ソースコードの取得">1. ソースコードの取得</a></li><li><a href="#Map画面を作成する。">2. Map画面を作成する。</a></li><li><a href="#動作確認">3. 動作確認</a></li><li><a href="#スタイルの変更">4. スタイルの変更</a></li><li><a href="#一連の動作確認">5. 一連の動作確認</a></li></ul></div><a href="#ソースコードの取得" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
                                 </section>
                             
@@ -427,7 +434,7 @@ export { initMap };
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"3. Map画面作成","level":"1.5","depth":1,"next":{"title":"4. おまけ","level":"1.6","depth":1,"path":"Section5.md","ref":"Section5.md","articles":[]},"previous":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section4.md","mtime":"2022-05-02T09:42:30.507Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-02T09:50:36.999Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"3. Map画面作成","level":"1.5","depth":1,"next":{"title":"4. おまけ","level":"1.6","depth":1,"path":"Section5.md","ref":"Section5.md","articles":[]},"previous":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section4.md","mtime":"2022-05-03T02:04:21.740Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T02:05:11.149Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

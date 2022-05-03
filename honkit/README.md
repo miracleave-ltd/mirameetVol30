@@ -1,6 +1,7 @@
 # はじめに  
 ## 今回のゴール
 BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  
+  
 データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionを使用していきます  
 今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。  
 PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
@@ -11,11 +12,11 @@ PCへのインストール不要なので、ブラウザ一つで開発するハ
 - フロントエンド
   - TypeScript
   - Node.js
-  - Cloud Shell Editer（開発環境兼、localhosの実行環境）
+  - Cloud Shell Editer（開発環境兼、実行環境）
 - バックエンド
   - JavaScript
   - Node.js
-  - Cloud Function（サーバーレス）
+  - Cloud Functions（サーバーレス）
 - API
   - GoogleMap JavaScript API
   - BigQuery API
@@ -43,4 +44,4 @@ PCへのインストール不要なので、ブラウザ一つで開発するハ
   - [WebGL Overlay (ThreeJS wrapper)](https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja)のサンプルコードをベースにしています。
 - [BigQuery API](https://cloud.google.com/bigquery/docs/reference/libraries-overview)
 - [Cloud Storage API](https://cloud.google.com/storage/docs/apis?hl=ja)
-- [Cloud Function](https://cloud.google.com/functions/docs/concepts/overview?hl=ja)
+- [Cloud Functions](https://cloud.google.com/functions/docs/concepts/overview?hl=ja)
