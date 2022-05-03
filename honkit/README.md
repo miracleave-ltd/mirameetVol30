@@ -2,10 +2,12 @@
 ## 今回のゴール
 BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  
   
-データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionを使用していきます  
+データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用していきます  
 今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。  
 PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
-![](img/mirameetvol30.drawio_0.png) 
+
+
+![](img/mirameetvol30.drawio_0.png)   
 
 使用する技術要素については、以下となります。  
 ※ページの最後に、技術要素の参考サイトを記載しています。  

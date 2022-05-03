@@ -93,7 +93,7 @@ https://console.cloud.google.com/functions/
 2.  『デプロイ』を選択し、デプロイされるのを待ちます。  
 約１分ほどでデプロイが完了します。
 
-3.  作成したCloud Function を選択します。
+3.  作成したCloud Functions を選択します。
     ![](img/section3-4.png)   
 
 4.   画面からのアクセスを許可します。  

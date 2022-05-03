@@ -269,12 +269,14 @@
  let mapOptions;
  let data = new Array();
 
- // Cloud FunctionのSELECT結果取得
+ // Cloud FunctionsのSELECT結果取得
  fetch(triggerUrl)
  .then(response =&gt; {
      console.log(response.status);
      response.json().then(userInfo =&gt; {
          for (var i = 0; i &lt; userInfo.length; i++) {
+
+             // MapAPIのオプション設定
              mapOptions = {
                  tilt: 0,
                  heading: 0,
@@ -360,33 +362,35 @@
 </ol>
 <h2 id="スタイルの変更">4. スタイルの変更</h2>
 <ol>
-<li><p>Google Map JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。<br>以下、URLにアクセスし、マップIDを作成します。<br><a href="https://console.cloud.google.com/google/maps-apis/studio/maps" target="_blank">https://console.cloud.google.com/google/maps-apis/studio/maps</a></p>
+<li><p>GoogleMap JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。<br>以下、URLにアクセスし、マップIDを作成します。<br><a href="https://console.cloud.google.com/google/maps-apis/studio/maps" target="_blank">https://console.cloud.google.com/google/maps-apis/studio/maps</a></p>
 </li>
 <li><p>『マップIDを作成』を選択します。<br> <img src="img/section4-6.png" alt>   </p>
 </li>
 <li><p>以下設定内容で、『保存』を選択します。
  <img src="img/section4-7_1.png" alt>   </p>
 </li>
-<li><p>次に、スタイルを作成します。<br>左メニューから『地図のスタイル』を選択し、『スタイルを作成』を選択します。
+<li><p>スタイルを作成します。<br>左メニューから『地図のスタイル』を選択し、『スタイルを作成』を選択します。
  <img src="img/section4-7.png" alt>   </p>
 </li>
 <li><p>バリエーションから任意のレイアウトを選択し、<br>スタイルの名前を入力して『保存』を選択します。<br>※デフォルトでもOKです。<br> <img src="img/section4-8_1.png" alt><br> <img src="img/section4-8.png" alt>   </p>
 </li>
-<li><p>『ADD MAP IDS』を選択し、先ほどのマップIDに紐づけます。
+<li><p>『ADD MAP IDS』を選択し、先ほど作成したマップIDに紐づけます。
  <img src="img/section4-9.png" alt>   </p>
 </li>
 <li><p>左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。<br> <img src="img/section4-10.png" alt>   </p>
 </li>
-<li><p>index.tsを開き、mapOptionsのmapIdに設定し、保存します。
+<li><p>index.tsを開き、mapOptionsのmapIdに作成したマップIDに書き換え、保存します。
  <img src="img/section4-11.png" alt>   </p>
 </li>
 </ol>
 <h2 id="一連の動作確認">5. 一連の動作確認</h2>
 <ol>
-<li>スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。<br> ※追加のJSONデータをコチラで用意していますので、以下リンクよりダウンロードください。<br>   ダウンロードリンク：<a href="https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing" target="_blank">https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing</a><br> 追加のデータには、以下３つの住所情報が入っています。<pre><code> - ディズニーランド
- - ユニバーサルスタジオジャパン
- - エトワール凱旋門
-</code></pre></li>
+<li>スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、<br>一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。<br>追加のJSONデータは、以下リンクよりダウンロードください。<br>以下３つの住所情報が入っています。<br><a href="https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing" target="_blank">ダウンロードリンク</a>    <ul>
+<li>ディズニーランド</li>
+<li>ユニバーサルスタジオジャパン</li>
+<li>エトワール凱旋門</li>
+</ul>
+</li>
 </ol>
 <ol>
 <li>&quot;<a href="http://localhost:300x/" target="_blank">http://localhost:300x/</a>&quot; を開き、スタイルが反映されていることを確認します。<br>※port（300x）は人によって異なります。<br> <img src="img/section4-12.png" alt>   </li>
@@ -434,7 +438,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"3. Map画面作成","level":"1.5","depth":1,"next":{"title":"4. おまけ","level":"1.6","depth":1,"path":"Section5.md","ref":"Section5.md","articles":[]},"previous":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section4.md","mtime":"2022-05-03T02:04:21.740Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T02:05:11.149Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"3. Map画面作成","level":"1.5","depth":1,"next":{"title":"4. おまけ","level":"1.6","depth":1,"path":"Section5.md","ref":"Section5.md","articles":[]},"previous":{"title":"2. 検索機能作成","level":"1.4","depth":1,"path":"Section3.md","ref":"Section3.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section4.md","mtime":"2022-05-03T23:32:22.468Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T23:32:33.137Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
