@@ -7,7 +7,7 @@
 ![](img/mirameetvol30.drawio_4.png) 
   
 ## 動作確認
-1. 再度、Cloud Storageに追加のJSONデータを配置します。  
+1. 追加で[Cloud Storage](https://console.cloud.google.com/storage/browser)にJSONデータを配置します。  
 既に２件のデータ（スカイツリー、東京タワー）が登録されているので、追加で３件のデータを  
 登録し、５件のデータが検索出来ることと  検索結果に応じた画面表示できることを確認します。  
 追加のJSONデータは、以下リンクよりダウンロードください。   
@@ -19,10 +19,13 @@
 
     ![](img/section5-1.png)   
 
-2. Cloud Shell Editerから、 "http://localhost:300x/" を開きます。  
+1. [Cloud Shell Editer](https://console.cloud.google.com/cloudshelleditor)から、 "http://localhost:300x/" を開きます。  
 ※port（300x）は人によって異なります。  
 もし、npm startを実行していない場合はターミナルよりnpm startコマンドの上、  
 localhostにアクセスください。  
+    ```
+    npm start
+    ```
 
 3. 追加の３件のデータをリクエストパラメータで検索してみましょう。  
 ※【URL】の部分は各GCPアカウントによって異なります。  
