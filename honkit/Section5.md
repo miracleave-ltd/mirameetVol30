@@ -16,13 +16,13 @@
    - ディズニーランド
    - ユニバーサルスタジオジャパン
    - エトワール凱旋門
+
     ![](img/section5-1.png)   
 
 2. Cloud Shell Editerから、 "http://localhost:300x/" を開きます。  
 ※port（300x）は人によって異なります。  
-　もし、npm startを実行していない場合は、ターミナルよりnpm startコマンドの上、  
-　localhostにアクセスください。  
-
+もし、npm startを実行していない場合はターミナルよりnpm startコマンドの上、  
+localhostにアクセスください。  
 
 3. 追加の３件のデータをリクエストパラメータで検索してみましょう。  
 ※【URL】の部分は各GCPアカウントによって異なります。  
