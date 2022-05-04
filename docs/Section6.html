@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>はじめに · mirameet</title>
+        <title>5. おまけ · mirameet</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.7.1">
@@ -76,8 +76,8 @@
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Section1.html" />
     
+    <link rel="prev" href="Section5.html" />
     
 
     </head>
@@ -106,7 +106,7 @@
         
         
     
-        <li class="chapter active" data-level="1.1" data-path="./">
+        <li class="chapter " data-level="1.1" data-path="./">
             
                 <a href="./">
             
@@ -184,7 +184,7 @@
             
         </li>
     
-        <li class="chapter " data-level="1.7" data-path="Section6.html">
+        <li class="chapter active" data-level="1.7" data-path="Section6.html">
             
                 <a href="Section6.html">
             
@@ -227,7 +227,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >はじめに</a>
+        <a href="." >5. おまけ</a>
     </h1>
 </div>
 
@@ -242,62 +242,49 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="はじめに"><a name="はじめに" class="plugin-anchor" href="#はじめに"><i class="fa fa-link" aria-hidden="true"></i></a>はじめに</h1>
-<h2 id="今回のゴール">1. 今回のゴール</h2>
-<p>BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  </p>
-<p>データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用していきます<br>今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。<br>PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  </p>
-<p><img src="img/mirameetvol30.drawio_0.png" alt>   </p>
-<p>使用する技術要素については、以下となります。<br>※ページの最後に、技術要素の参考サイトを記載しています。  </p>
+                                <h1 id="おまけ"><a name="おまけ" class="plugin-anchor" href="#おまけ"><i class="fa fa-link" aria-hidden="true"></i></a>おまけ</h1>
+<p>最後に、APIの無効化と作成Cloud Functionsを削除をします。  </p>
+<p>※無料期間が終了しても自動で課金されることはありません<br>　GCP内をCleanUpしたい方は以下手順を行ってください  </p>
+<hr>
+<h2 id="Cloud_Functionsの削除">1. Cloud Functionsの削除</h2>
+<ol>
+<li><p>以下URLまたは、検索バーから「Cloud Functions」と検索し、Cloud Functionsを開きます。<br><a href="https://console.cloud.google.com/functions/" target="_blank">https://console.cloud.google.com/functions/</a>  </p>
+</li>
+<li><p>「bigquerySelect」にチェックボックスを入れ、『権限』を選択します。<br> <img src="img/section6-1.png" alt>   </p>
+</li>
+<li><p>「Cloud Functions 開発者」から、allUsersの『ゴミ箱マーク』を選択します。
+ <img src="img/section6-2.png" alt>   </p>
+</li>
+<li><p>削除の確認が求められるので、『削除』を選択します。
+ <img src="img/section6-3.png" alt>   </p>
+</li>
+<li><p>作成したCloud Functions にチェックを入れ、『削除』を選択します。
+ <img src="img/section6-4.png" alt>   </p>
+</li>
+<li><p>削除の確認が求められるので、『削除』を選択します。
+ <img src="img/section6-5.png" alt>   </p>
+</li>
+</ol>
+<h2 id="GCPのAPI無効化">2. GCPのAPI無効化</h2>
+<ol>
+<li><p>以下URLまたは、検索バーから「APIとサービス」と検索し、APIとサービス画面を表示します。<br><a href="https://console.cloud.google.com/apis/dashboard" target="_blank">https://console.cloud.google.com/apis/dashboard</a></p>
+</li>
+<li><p>以下APIを選択します。  </p>
 <ul>
-<li>フロントエンド<ul>
-<li>TypeScript</li>
-<li>Node.js</li>
-<li>Cloud Shell Editer（開発環境兼、実行環境）</li>
-</ul>
-</li>
-<li>バックエンド<ul>
-<li>JavaScript</li>
-<li>Node.js</li>
-<li>Cloud Functions（サーバーレス）</li>
-</ul>
-</li>
-<li>API<ul>
-<li>GoogleMap JavaScript API</li>
-<li>BigQuery API</li>
-<li>Cloud Storage API</li>
-</ul>
-</li>
-<li>データベース<ul>
-<li>BigQuery</li>
-</ul>
-</li>
-<li>ストレージ<ul>
-<li>Cloud Storage</li>
-</ul>
+<li>Cloud Functions API</li>
+<li>Cloud Build API</li>
+<li><p>Maps JavaScript API</p>
+<p><img src="img/section6-6.png" alt>   </p>
 </li>
 </ul>
-<h2 id="事前に準備頂きたいこと">2. 事前に準備頂きたいこと</h2>
-<ul>
-<li>GCPアカウントの作成<ul>
-<li>BigQueryのデータセット作成</li>
-<li>Cloud Storageのバケット作成</li>
-</ul>
 </li>
-</ul>
-<h2 id="手順">3. 手順</h2>
-<p>全体手順としては次の流れで進めます。<br> 　0.GCPのAPI有効化<br> 　1.データ登録機能作成<br> 　2.検索機能作成<br> 　3.Map画面作成<br> 　4.プログラム実行<br> 　5.おまけ  </p>
-<h2 id="技術要素">4. 技術要素</h2>
-<p>参考サイトのリンクを記載しておきますので、参考にお使いください。  </p>
-<ul>
-<li><a href="https://developers.google.com/maps/documentation/javascript?hl=ja" target="_blank">GoogleMap JavaScript API</a><ul>
-<li><a href="https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja" target="_blank">WebGL Overlay (ThreeJS wrapper)</a>のサンプルコードをベースにしています。</li>
-</ul>
+<li><p>各APIの画面で『APIを無効化する』、または『無効にします』を選択します。
+ <img src="img/section6-7.png" alt>   </p>
+<p> <img src="img/section6-8.png" alt>   </p>
+<p> <img src="img/section6-9.png" alt>   </p>
 </li>
-<li><a href="https://cloud.google.com/bigquery/docs/reference/libraries-overview" target="_blank">BigQuery API</a></li>
-<li><a href="https://cloud.google.com/storage/docs/apis?hl=ja" target="_blank">Cloud Storage API</a></li>
-<li><a href="https://cloud.google.com/functions/docs/concepts/overview?hl=ja" target="_blank">Cloud Functions</a></li>
-</ul>
-<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#はじめに">はじめに</a></p><li><a href="#今回のゴール">1. 今回のゴール</a></li><li><a href="#事前に準備頂きたいこと">2. 事前に準備頂きたいこと</a></li><li><a href="#手順">3. 手順</a></li><li><a href="#技術要素">4. 技術要素</a></li></ul></div><a href="#今回のゴール" id="goTop"><i class="fa fa-arrow-up"></i></a>
+</ol>
+<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#おまけ">おまけ</a></p><li><a href="#Cloud_Functionsの削除">1. Cloud Functionsの削除</a></li><li><a href="#GCPのAPI無効化">2. GCPのAPI無効化</a></li></ul></div><a href="#Cloud_Functionsの削除" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
                                 </section>
                             
@@ -324,10 +311,10 @@
 
             
                 
-                
-                <a href="Section1.html" class="navigation navigation-next navigation-unique" aria-label="Next page: 0.  GCPのAPI有効化">
-                    <i class="fa fa-angle-right"></i>
+                <a href="Section5.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 4. プログラム実行">
+                    <i class="fa fa-angle-left"></i>
                 </a>
+                
                 
             
         
@@ -336,7 +323,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"はじめに","level":"1.1","depth":1,"next":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"README.md","mtime":"2022-05-03T23:59:10.760Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-04T00:00:42.469Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"5. おまけ","level":"1.7","depth":1,"previous":{"title":"4. プログラム実行","level":"1.6","depth":1,"path":"Section5.md","ref":"Section5.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section6.md","mtime":"2022-05-03T23:50:57.265Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-04T00:00:42.469Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
