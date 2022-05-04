@@ -1,5 +1,5 @@
 # Map画面作成  
-この手順では、GoogleMapJavaSciriptAPIを使い、  
+GoogleMapJavaSciriptAPIを使い、  
 BigQueryの情報を絞り込んでピン止めするプログラムを作成してきます。  
 開発環境と実行環境はCloud Shell Editerです。  
 
@@ -175,18 +175,3 @@ https://console.cloud.google.com/google/maps-apis/studio/maps
 
 3. index.tsを開き、mapOptionsのmapIdに作成したマップIDに書き換え、保存します。
     ![](img/section4-11.png)   
-
-## 一連の動作確認
-1. スタイルの設定まで出来たら、Cloud Storageに追加のJSONデータを配置し、  
-一連の流れでデータが登録されてMap上に反映されるまで確認してみましょう。  
-追加のJSONデータは、以下リンクよりダウンロードください。   
-以下３つの住所情報が入っています。  
-[ダウンロードリンク](https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing)    
-   - ディズニーランド
-   - ユニバーサルスタジオジャパン
-   - エトワール凱旋門
-
-
-2. "http://localhost:300x/" を開き、スタイルが反映されていることを確認します。  
-※port（300x）は人によって異なります。  
-    ![](img/section4-12.png)   

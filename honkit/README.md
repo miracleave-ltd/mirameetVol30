@@ -39,7 +39,9 @@ PCへのインストール不要なので、ブラウザ一つで開発するハ
  　1.データ登録機能作成  
  　2.検索機能作成  
  　3.Map画面作成  
-
+ 　4.プログラム実行  
+ 　5.おまけ  
+ 
 ## 技術要素
 参考サイトのリンクを記載しておきますので、参考にお使いください。  
 - [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript?hl=ja)

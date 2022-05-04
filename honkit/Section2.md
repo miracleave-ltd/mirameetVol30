@@ -124,7 +124,7 @@ GCSとBigQueryのロケーションは同じである必要があります。
 
   [ダウンロードリンク](https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing)  
 
-- 東京スカイツリー
+- スカイツリー
 - 東京タワー
 
 ----

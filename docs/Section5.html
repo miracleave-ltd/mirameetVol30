@@ -3,7 +3,7 @@
 <html lang="ja" >
     <head>
         <meta charset="UTF-8">
-        <title>4. おまけ · mirameet</title>
+        <title>4. プログラム実行 · mirameet</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="HonKit 3.7.1">
@@ -75,6 +75,8 @@
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="gitbook/images/apple-touch-icon-precomposed-152.png">
     <link rel="shortcut icon" href="gitbook/images/favicon.ico" type="image/x-icon">
 
+    
+    <link rel="next" href="Section6.html" />
     
     
     <link rel="prev" href="Section4.html" />
@@ -176,7 +178,20 @@
                 <a href="Section5.html">
             
                     
-                    4. おまけ
+                    4. プログラム実行
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.7" data-path="Section6.html">
+            
+                <a href="Section6.html">
+            
+                    
+                    5. おまけ
             
                 </a>
             
@@ -214,7 +229,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href="." >4. おまけ</a>
+        <a href="." >4. プログラム実行</a>
     </h1>
 </div>
 
@@ -229,49 +244,30 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <h1 id="おまけ"><a name="おまけ" class="plugin-anchor" href="#おまけ"><i class="fa fa-link" aria-hidden="true"></i></a>おまけ</h1>
-<p>最後に、APIの無効化と作成Cloud Functionsを削除をします。  </p>
-<p>※無料期間が終了しても自動で課金されることはありません<br>　GCP内をCleanUpしたい方は以下手順を行ってください  </p>
+                                <h1 id="プログラム実行"><a name="プログラム実行" class="plugin-anchor" href="#プログラム実行"><i class="fa fa-link" aria-hidden="true"></i></a>プログラム実行</h1>
+<p>作成したプログラム実行し、一連の流れで最終確認を行っていきます。<br>実行環境はCloud Shell Editerです。  </p>
 <hr>
-<h2 id="Cloud_Functionsの削除">1. Cloud Functionsの削除</h2>
+<p><img src="img/mirameetvol30.drawio_4.png" alt> </p>
+<h2 id="動作確認">1. 動作確認</h2>
 <ol>
-<li><p>以下URLまたは、検索バーから「Cloud Functions」と検索し、Cloud Functionsを開きます。<br><a href="https://console.cloud.google.com/functions/" target="_blank">https://console.cloud.google.com/functions/</a>  </p>
-</li>
-<li><p>「bigquerySelect」にチェックボックスを入れ、『権限』を選択します。<br> <img src="img/section5-1.png" alt>   </p>
-</li>
-<li><p>「Cloud Functions 開発者」から、allUsersの『ゴミ箱マーク』を選択します。
- <img src="img/section5-2.png" alt>   </p>
-</li>
-<li><p>削除の確認が求められるので、『削除』を選択します。
- <img src="img/section5-3.png" alt>   </p>
-</li>
-<li><p>作成したCloud Functions にチェックを入れ、『削除』を選択します。
- <img src="img/section5-4.png" alt>   </p>
-</li>
-<li><p>削除の確認が求められるので、『削除』を選択します。
- <img src="img/section5-5.png" alt>   </p>
-</li>
-</ol>
-<h2 id="GCPのAPI無効化">2. GCPのAPI無効化</h2>
-<ol>
-<li><p>以下URLまたは、検索バーから「APIとサービス」と検索し、APIとサービス画面を表示します。<br><a href="https://console.cloud.google.com/apis/dashboard" target="_blank">https://console.cloud.google.com/apis/dashboard</a></p>
-</li>
-<li><p>以下APIを選択します。  </p>
+<li><p>再度、Cloud Storageに追加のJSONデータを配置します。<br>既に２件のデータ（スカイツリー、東京タワー）が登録されているので、追加で３件のデータを<br>登録し、５件のデータが検索出来ることと  検索結果に応じた画面表示できることを確認します。<br>追加のJSONデータは、以下リンクよりダウンロードください。<br>以下３つの住所情報が入っています。<br><a href="https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing" target="_blank">ダウンロードリンク</a>    </p>
 <ul>
-<li>Cloud Functions API</li>
-<li>Cloud Build API</li>
-<li><p>Maps JavaScript API</p>
-<p><img src="img/section5-6.png" alt>   </p>
-</li>
+<li>ディズニーランド</li>
+<li>ユニバーサルスタジオジャパン</li>
+<li>エトワール凱旋門
+<img src="img/section5-1.png" alt>   </li>
 </ul>
 </li>
-<li><p>各APIの画面で『APIを無効化する』、または『無効にします』を選択します。
- <img src="img/section5-7.png" alt>   </p>
-<p> <img src="img/section5-8.png" alt>   </p>
-<p> <img src="img/section5-9.png" alt>   </p>
+<li><p>Cloud Shell Editerから、 &quot;<a href="http://localhost:300x/" target="_blank">http://localhost:300x/</a>&quot; を開きます。<br>※port（300x）は人によって異なります。<br>　もし、npm startを実行していない場合は、ターミナルよりnpm startコマンドの上、<br>　localhostにアクセスください。  </p>
 </li>
 </ol>
-<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#おまけ">おまけ</a></p><li><a href="#Cloud_Functionsの削除">1. Cloud Functionsの削除</a></li><li><a href="#GCPのAPI無効化">2. GCPのAPI無効化</a></li></ul></div><a href="#Cloud_Functionsの削除" id="goTop"><i class="fa fa-arrow-up"></i></a>
+<ol>
+<li>追加の３件のデータをリクエストパラメータで検索してみましょう。<br>※【URL】の部分は各GCPアカウントによって異なります。  <pre><code> 例）
+ 　https://【URL】&amp;address=ディズニー
+ 　https://【URL】&amp;address=ユニバーサル
+</code></pre>検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。<br>また、前手順で設定したスタイル設定も反映されていることを確認します。<br> <img src="img/section5-2.png" alt>   </li>
+</ol>
+<div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#プログラム実行">プログラム実行</a></p><li><a href="#動作確認">1. 動作確認</a></li></ul></div><a href="#動作確認" id="goTop"><i class="fa fa-arrow-up"></i></a>
                                 
                                 </section>
                             
@@ -298,10 +294,14 @@
 
             
                 
-                <a href="Section4.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 3. Map画面作成">
+                <a href="Section4.html" class="navigation navigation-prev " aria-label="Previous page: 3. Map画面作成">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
+                
+                <a href="Section6.html" class="navigation navigation-next " aria-label="Next page: 5. おまけ">
+                    <i class="fa fa-angle-right"></i>
+                </a>
                 
             
         
@@ -310,7 +310,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"4. おまけ","level":"1.6","depth":1,"previous":{"title":"3. Map画面作成","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section5.md","mtime":"2022-05-03T23:27:01.040Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-03T23:32:33.137Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"4. プログラム実行","level":"1.6","depth":1,"next":{"title":"5. おまけ","level":"1.7","depth":1,"path":"Section6.md","ref":"Section6.md","articles":[]},"previous":{"title":"3. Map画面作成","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section5.md","mtime":"2022-05-03T23:57:48.856Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-04T00:00:42.469Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

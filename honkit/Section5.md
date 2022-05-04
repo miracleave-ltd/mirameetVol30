@@ -1,43 +1,36 @@
-# おまけ  
-最後に、APIの無効化と作成Cloud Functionsを削除をします。  
-
-※無料期間が終了しても自動で課金されることはありません  
-　GCP内をCleanUpしたい方は以下手順を行ってください  
+# プログラム実行  
+作成したプログラム実行し、一連の流れで最終確認を行っていきます。  
+実行環境はCloud Shell Editerです。  
 
 ----
-## Cloud Functionsの削除
-1. 以下URLまたは、検索バーから「Cloud Functions」と検索し、Cloud Functionsを開きます。  
-https://console.cloud.google.com/functions/  
-
-2. 「bigquerySelect」にチェックボックスを入れ、『権限』を選択します。  
+ 
+![](img/mirameetvol30.drawio_4.png) 
+  
+## 動作確認
+1. 再度、Cloud Storageに追加のJSONデータを配置します。  
+既に２件のデータ（スカイツリー、東京タワー）が登録されているので、追加で３件のデータを  
+登録し、５件のデータが検索出来ることと  検索結果に応じた画面表示できることを確認します。  
+追加のJSONデータは、以下リンクよりダウンロードください。   
+以下３つの住所情報が入っています。  
+[ダウンロードリンク](https://drive.google.com/file/d/1X8QXCKnN_sWgWR83a_F7JPSo9FXAedN6/view?usp=sharing)    
+   - ディズニーランド
+   - ユニバーサルスタジオジャパン
+   - エトワール凱旋門
     ![](img/section5-1.png)   
 
-3. 「Cloud Functions 開発者」から、allUsersの『ゴミ箱マーク』を選択します。
+2. Cloud Shell Editerから、 "http://localhost:300x/" を開きます。  
+※port（300x）は人によって異なります。  
+　もし、npm startを実行していない場合は、ターミナルよりnpm startコマンドの上、  
+　localhostにアクセスください。  
+
+
+3. 追加の３件のデータをリクエストパラメータで検索してみましょう。  
+※【URL】の部分は各GCPアカウントによって異なります。  
+    ```
+    例）
+    　https://【URL】&address=ディズニー
+    　https://【URL】&address=ユニバーサル
+    ```  
+検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。  
+また、前手順で設定したスタイル設定も反映されていることを確認します。  
     ![](img/section5-2.png)   
-
-4. 削除の確認が求められるので、『削除』を選択します。
-    ![](img/section5-3.png)   
-
-5. 作成したCloud Functions にチェックを入れ、『削除』を選択します。
-    ![](img/section5-4.png)   
-
-6. 削除の確認が求められるので、『削除』を選択します。
-    ![](img/section5-5.png)   
-
-## GCPのAPI無効化  
-1. 以下URLまたは、検索バーから「APIとサービス」と検索し、APIとサービス画面を表示します。  
-https://console.cloud.google.com/apis/dashboard
-
-1. 以下APIを選択します。  
-   - Cloud Functions API
-   - Cloud Build API
-   - Maps JavaScript API
-
-    ![](img/section5-6.png)   
-
-2. 各APIの画面で『APIを無効化する』、または『無効にします』を選択します。
-    ![](img/section5-7.png)   
-
-    ![](img/section5-8.png)   
-
-    ![](img/section5-9.png)   
