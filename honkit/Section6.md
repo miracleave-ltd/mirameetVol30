@@ -28,14 +28,14 @@ https://console.cloud.google.com/functions/
 1. 以下URLまたは、検索バーから「APIとサービス」と検索し、APIとサービス画面を表示します。  
 https://console.cloud.google.com/apis/dashboard
 
-1. 以下APIを選択します。  
+2. 以下APIを選択します。  
    - Cloud Functions API
    - Cloud Build API
    - Maps JavaScript API
 
     ![](img/section6-6.png)   
 
-2. 各APIの画面で『APIを無効化する』、または『無効にします』を選択します。
+3. 各APIの画面で『APIを無効化する』、または『無効にします』を選択します。
     ![](img/section6-7.png)   
 
     ![](img/section6-8.png)   

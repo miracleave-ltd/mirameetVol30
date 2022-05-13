@@ -1,6 +1,5 @@
 # Map画面作成  
-GoogleMapJavaSciriptAPIを使い、  
-BigQueryの情報を絞り込んでピン止めするプログラムを作成してきます。  
+GoogleMapJavaSciriptAPIを使い、BigQueryの情報を絞り込んでピン止めするプログラムを作成します。  
 開発環境と実行環境はCloud Shell Editerです。  
 
 ----
