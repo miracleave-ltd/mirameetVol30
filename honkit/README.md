@@ -2,7 +2,7 @@
 ## 今回のゴール
 BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  
   
-データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用していきます  
+データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用します。  
 今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。  
 また、PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
 
@@ -43,7 +43,7 @@ BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使�
  　5.おまけ  
  
 ## 技術要素
-参考サイトのリンクを記載しておきますので、参考にお使いください。  
+以下は技術要素の参考サイトのリンクです。  
 - [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript?hl=ja)
   - [WebGL Overlay (ThreeJS wrapper)](https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja)のサンプルコードをベースにしています。
 - [BigQuery API](https://cloud.google.com/bigquery/docs/reference/libraries-overview)

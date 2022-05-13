@@ -245,7 +245,7 @@
                                 <h1 id="はじめに"><a name="はじめに" class="plugin-anchor" href="#はじめに"><i class="fa fa-link" aria-hidden="true"></i></a>はじめに</h1>
 <h2 id="今回のゴール">1. 今回のゴール</h2>
 <p>BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  </p>
-<p>データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用していきます<br>今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。<br>また、PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  </p>
+<p>データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用します。<br>今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。<br>また、PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  </p>
 <p><img src="img/mirameetvol30.drawio_0.png" alt>   </p>
 <p>使用する技術要素については、以下となります。<br>※ページの最後に、技術要素の参考サイトを記載しています。  </p>
 <ul>
@@ -287,7 +287,7 @@
 <h2 id="手順">3. 手順</h2>
 <p>全体手順としては次の流れで進めます。<br> 　0.GCPのAPI有効化<br> 　1.データ登録機能作成<br> 　2.検索機能作成<br> 　3.Map画面作成<br> 　4.プログラム実行<br> 　5.おまけ  </p>
 <h2 id="技術要素">4. 技術要素</h2>
-<p>参考サイトのリンクを記載しておきますので、参考にお使いください。  </p>
+<p>以下は技術要素の参考サイトのリンクです。  </p>
 <ul>
 <li><a href="https://developers.google.com/maps/documentation/javascript?hl=ja" target="_blank">GoogleMap JavaScript API</a><ul>
 <li><a href="https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja" target="_blank">WebGL Overlay (ThreeJS wrapper)</a>のサンプルコードをベースにしています。</li>
@@ -336,7 +336,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"はじめに","level":"1.1","depth":1,"next":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"README.md","mtime":"2022-05-04T00:09:01.863Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-04T00:12:43.956Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"はじめに","level":"1.1","depth":1,"next":{"title":"0.  GCPのAPI有効化","level":"1.2","depth":1,"path":"Section1.md","ref":"Section1.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"README.md","mtime":"2022-05-13T09:14:35.230Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-13T09:23:52.648Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>
