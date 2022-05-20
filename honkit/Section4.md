@@ -1,5 +1,7 @@
 # Map画面作成  
-GoogleMapJavaSciriptAPIを使い、BigQueryの情報を絞り込んでピン止めするプログラムを作成します。  
+Maps JavaSciript APIを使い、BigQueryの情報を絞り込んでピン止めするプログラムを作成します。  
+このプログラムは、トリガーURL（手順2.で作成した機能）にアクセスして、  
+検索結果が取得出来たら、Maps JavaScrit APIを使って画面描写をします。  
 開発環境と実行環境はCloud Shell Editerです。  
 
 ----
@@ -23,10 +25,15 @@ https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2
 1. Cloud Shell Editerからindex.tsを開き、以下コードに書き換えます。  
 ソースコードの【トリガーURL】の部分は、  
 手順[2.]のCloud Functionsで作成したbigquerySelectのトリガーURLを記載します。  
-{% hint style='working' %} このプログラムは、トリガーURLにアクセスし、  
-検索結果を取得出来たらGoogleMap JavaScrit APIを使って画面描写をしています。
-このソースコードには、GoogleMap JavaScript APIの各設定オプションがありますので、  
-表示方法を変えたい場合は設定オプションを変更することでレイアウトを変更できます。{% endhint %}
+{% hint style='working' %}
+立体的な地図描写を実現するGLTFLoaderを使用します。  
+
+Cloud FunctionsのプログラムをトリガーURLに指定してHTTPアクセスを行い、  
+BigQueryから緯度経度情報を取得します。  
+
+mapOptionでは、描写の設定が可能です。  
+緯度経度情報の設定や、倍率を設定できます。  
+{% endhint %}
 
     ```
     // import
@@ -146,7 +153,7 @@ https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2
     ![](img/section4-5.png)   
 
 ## スタイルの変更
-1. GoogleMap JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。  
+1. Maps JavaScript APIではレイアウトの変更がプログラム修正なしで可能です。  
 以下、URLにアクセスし、マップIDを作成します。  
 https://console.cloud.google.com/google/maps-apis/studio/maps
 

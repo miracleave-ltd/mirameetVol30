@@ -1,7 +1,9 @@
 # データ登録機能作成  
-テストデータは、JSON形式のデータを使用します。  
-テストデータはBigQueryに自動で取り込めるようにするため、Cloud Storageに配置されたファイルを  
-トリガーとして、プログラムでBigQueryに自動登録するようにします。  
+Cloud Storageに配置されたデータファイルをCloud Functionsのトリガーとして起動させます。  
+Cloud Functionsでは、Cloud Storageのファイル読み込んでBigQueryにロードします。  
+Cloud StorageとBigQueryのロケーションは同じである必要があります。  
+今回のハンズオンは全て"us-central1"で統一します。
+データは、JSON形式のデータを使用します。  
 実行環境はCloud Functionsです。  
 
 ----
@@ -28,12 +30,14 @@ https://console.cloud.google.com/functions/
 6. ランタイムは"Node.js 16"を選択します。  
 
 7. index.jsを開き、以下コードに書き換えます。  
-【指定のバケット名】と【指定のデータセット名】は指定の値に書き換えます。  
+【指定のバケット名】と【指定のデータセット名】はご自身のGCP環境に合わせた値に書き換えます。  
 エントリポイントは、JavaScriptのプログラムに合わせ、"main"に変更します。  
-{% hint style='working' %} このプログラムは、GCSに配置されたトリガー情報からファイル名を取得し、  
-指定のGCSバケットからBigQueryのテーブルにロードを行っています。  
-GCSとBigQueryのロケーションは同じである必要があります。  
-今回は"us-central1"で統一しています。{% endhint %}
+{% hint style='working' %}constでBigQueryとCloud Storageのモジュールを読み込みます。  
+
+metadataでは、読み込むJSON形式のデータのフォーマットを指定します。  
+
+await bigquery~でBigQueryにJSONデータをロードします。  
+テーブルが無ければCREATEした上でテーブルがINSERTされ、テーブルがある場合はINSERTされます。  {% endhint %}
 
     ```
     // import
@@ -116,51 +120,22 @@ GCSとBigQueryのロケーションは同じである必要があります。
 約１分ほどでデプロイが完了します。  
     ![](img/section2-6.png)  
 
-## テストデータの作成  
-※以下手順はテストデータの作成手順ですが、  
-　今回のハンズオンでは弊社側で用意したテストデータをお渡ししますので、そちらを利用ください。  
-　このJSONデータには、以下２つの住所情報が入っています。  
+## テストデータの準備  
+今回のハンズオンでは弊社側で用意したテストデータをお渡ししますので、そちらを利用ください。  
+テストデータの作成方法は今回実施しませんが、最後のおまけで簡単に紹介します。  
 
-
+このテストデータには、以下２つの住所情報が入っています。  
   [ダウンロードリンク](https://drive.google.com/file/d/1LA-Uh3oEF1iGj_ClTeIVZ7_F9V5iyKuJ/view?usp=sharing)  
 
 - スカイツリー
 - 東京タワー
 
-----
-
-1. GoogleMapを開きます。  
-https://www.google.co.jp/maps  
-
-2. お気に入りの場所を選択し、『スター付き』を選択します。  
-    ![](img/section2-7.png)   
-
-3. 複数スターを付けていきます。  
-
-4. Googleデータエクスポートを開きます。  
-https://takeout.google.com/settings/takeout  
-「選択をすべて解除」選択し、「マップ（マイプレイス）」のみ選択します。  
-    ![](img/section2-8.png)   
-
-5. 「次のステップ」　＞　「エクスポート作成」をクリックします。  
-
-6. 「ダウンロード」をクリックします。  
-
-7. ダウンロードしたZIPファイルを解凍し、JSON形式でスターを付けた情報が存在することを確認します。  
-
-8. ダウンロードしたJSONデータですがカラム名にスペースが混在しており、BigQueryとしては都合が悪いため、置換して削除します。  
-以下コマンドをGitBash等のTerminalで実行します。
-    ```
-    cd *JSONデータをダウンロードしたディレクトリ
-
-    sed -z 's/\n//g' 保存した場所.json | sed -z 's/Google Maps URL/GoogleMapsURL/g' | sed -z 's/Business Name/BusinessName/g' | sed -z 's/Geo Coordinates/GeoCoordinates/g' | sed -z 's/Country Code/CountryCode/g' > test_data.json
-    ```
 
 ## テストデータを登録する
 1. 以下URLまたは、検索バーから「Cloud Stroage」と検索し、Cloud Stroageを開きます。    
 https://console.cloud.google.com/storage/browser  
 
-1. 先ほどのプログラムに書き加えたバケット名を選択します。
+1. 先ほどのプログラムに書き加えたバケット名をクリックします。
 
 2. 『ファイルをアップロード』を選択し、"test_data1.json"をアップロードします。  
 アップロード完了後、作成したCloud Functionsがアップロードされたファイルをトリガーに、BigQueryへ登録されます。  
@@ -169,10 +144,6 @@ https://console.cloud.google.com/storage/browser
 4. 以下URLまたは、検索バーから「BigQuery」と検索し、BigQueryを開きます。
 https://console.cloud.google.com/bigquery
 
-5. 『クエリを新規作成』を選択し、  
-SQLエディターから、SELECT文を実行しテストデータが登録されているかを確認します。  
-    ```
-    SELECT * FROM *指定のデータセット名.TEST_TABLE
-    ```
+1. 左ペインから、プロジェクト＞データセットの順で展開し、TEST_TABLEが作成されていることを確認します。  
     ![](img/section2-10.png)   
 
