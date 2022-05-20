@@ -1,16 +1,33 @@
 # はじめに  
 ## 今回のゴール
-BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使って画面表示します。  
+BigQueryに溜め込んだデータ（住所情報）を、 Maps JavaScript APIを使って画面表示します。  
   
 データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用します。  
-今回は大きく３機能作成しますが、全てGCPコンソール上の開発で完結出来るハンズオンとなります。  
+今回は大きく３機能作成しますが、全てGCP上で開発が出来るハンズオンとなります。  
 また、PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
 
+## 事前に準備頂きたいこと
+- GCPアカウントの作成
+  - BigQueryのデータセット作成
+    - データセット名：任意　※手順の中でソースコードに埋め込みます
+    - リージョン：us-central1
+  - Cloud Storageのバケット作成
+    - バケット名：任意　　　※手順の中でソースコードに埋め込みます
+    - リージョン：us-central1
 
-![](img/mirameetvol30.drawio_0.png)   
+## 手順 
+全体手順としては次の流れで進めます。  
+ 　0.事前準備  
+ 　1.データ登録機能作成  
+ 　2.検索機能作成  
+ 　3.Map画面作成  
+ 　4.プログラム実行  
+ 　5.最後に  
+ 　6.おまけ  
+ ![](img/mirameetvol30.drawio_0.png)   
 
+## 技術要素
 使用する技術要素については、以下となります。  
-※ページの最後に、技術要素の参考サイトを記載しています。  
 - フロントエンド
   - TypeScript
   - Node.js
@@ -20,7 +37,7 @@ BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使�
   - Node.js
   - Cloud Functions（サーバーレス）
 - API
-  - GoogleMap JavaScript API
+  - Maps JavaScript API
   - BigQuery API
   - Cloud Storage API
 - データベース
@@ -28,23 +45,8 @@ BigQueryに溜め込んだデータ（住所情報）を、 GoogleMapAPIを使�
 - ストレージ
   - Cloud Storage
 
-## 事前に準備頂きたいこと
-- GCPアカウントの作成
-  - BigQueryのデータセット作成
-  - Cloud Storageのバケット作成
-
-## 手順 
-全体手順としては次の流れで進めます。  
- 　0.GCPのAPI有効化  
- 　1.データ登録機能作成  
- 　2.検索機能作成  
- 　3.Map画面作成  
- 　4.プログラム実行  
- 　5.おまけ  
- 
-## 技術要素
-以下は技術要素の参考サイトのリンクです。  
-- [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript?hl=ja)
+以下は技術要素の参考サイトです。  
+- [Maps JavaScript API](https://developers.google.com/maps/documentation/javascript?hl=ja)
   - [WebGL Overlay (ThreeJS wrapper)](https://developers.google.com/maps/documentation/javascript/examples/webgl/threejs-overlay-simple?hl=ja)のサンプルコードをベースにしています。
 - [BigQuery API](https://cloud.google.com/bigquery/docs/reference/libraries-overview)
 - [Cloud Storage API](https://cloud.google.com/storage/docs/apis?hl=ja)

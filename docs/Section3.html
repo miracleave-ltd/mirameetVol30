@@ -126,7 +126,7 @@
                 <a href="Section1.html">
             
                     
-                    0.  GCPのAPI有効化
+                    0. 事前準備
             
                 </a>
             
@@ -191,7 +191,20 @@
                 <a href="Section6.html">
             
                     
-                    5. おまけ
+                    5. 最後に
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.8" data-path="Section7.html">
+            
+                <a href="Section7.html">
+            
+                    
+                    6. おまけ
             
                 </a>
             
@@ -245,7 +258,7 @@
                                 <section class="normal markdown-section">
                                 
                                 <h1 id="検索機能作成"><a name="検索機能作成" class="plugin-anchor" href="#検索機能作成"><i class="fa fa-link" aria-hidden="true"></i></a>検索機能作成</h1>
-<p>BigQueryに登録したデータを検索するプログラムを作成します。<br>検索条件はリクエストパラメータで渡すようにし、緯度経度情報を検索結果として取得します。<br>実行環境はCloud Functionsです。  </p>
+<p>BigQueryに登録したデータを検索するプログラムを作成します。<br>このプログラムは、リクエストパラメータで渡された検索条件でSELECT文を作成し、<br>BigQuery APIを用いてBigQueryのデータを検索します。<br>検索結果には、緯度・経度情報を取得してレスポンス情報として、返却します。<br>実行環境はCloud Functionsです。  </p>
 <hr>
 <p><img src="img/mirameetvol30.drawio_2.png" alt> </p>
 <h2 id="検索機能を作成する">1. 検索機能を作成する</h2>
@@ -261,7 +274,8 @@
 </li>
 <li><p>ランタイムは&quot;Node.js 16&quot;を選択します。</p>
 </li>
-<li><p>index.jsを開き、以下コードに書き換えます。<br>エントリポイントは、JavaScriptのプログラムに合わせ、&quot;main&quot;に変更します。<br><div class="alert alert-warning hints-alert"><div class="hints-icon"><i class="fa fa-wrench"></i></div><div class="hints-container"><p> このプログラムは、リクエストパラメータを条件に、SELECT文を作成し、BigQuery APIを用いてBigQueryのデータを検索しています。<br>検索条件はBusinessNameです。検索結果は、緯度・経度情報を取得します。<br>検索結果はレスポンス情報として、返却します。</p>
+<li><p>index.jsを開き、以下コードに書き換えます。<br>【指定のデータセット名】はご自身のGCP環境に合わせた値に書き換えます。<br>エントリポイントは、JavaScriptのプログラムに合わせ、&quot;main&quot;に変更します。<br><div class="alert alert-warning hints-alert"><div class="hints-icon"><i class="fa fa-wrench"></i></div><div class="hints-container"><p>let queryでSELECT文を作成します。BigQueryに登録したデータはJSON形式のため、<br>UNNESTを使用して緯度経度情報を取得するSELECT文です。  </p>
+<p>bigquery.createQueryJobでSELECT文をBigQueryに発行します。<br>レガシーSQLを使用する場合は、useLegacySqlを&quot;true&quot;に設定してください。  </p>
 </div></div></p>
 <pre><code> // import
  const { BigQuery } = require(&apos;@google-cloud/bigquery&apos;);
@@ -335,7 +349,7 @@
 <ol>
 <li><p>『トリガー』タブから、『トリガーURL』を選択して動作確認をします。<br> <img src="img/section3-7.png" alt>   </p>
 </li>
-<li><p>テストデータはスカイツリーと、東京タワーの二つが登録されているので、<br>リクエストパラメータに&quot;?address=スカイツリー&quot;のように検索値を渡すことで、<br>BigQueryの検索結果が変わることが確認できます。。<br>また、テストデータの存在しない条件の場合は、NULLが返却されていることがわかります。<br> <img src="img/section3-8.png" alt> </p>
+<li><p>テストデータはスカイツリーと、東京タワーの二つが登録されているので、<br>リクエストパラメータに&quot;?address=スカイツリー&quot;のように検索値を渡すことで、<br>BigQueryの検索結果が変わることが確認できます。<br>また、テストデータの存在しない条件の場合は、NULLが返却されていることがわかります。<br> <img src="img/section3-8.png" alt> </p>
 </li>
 </ol>
 <div id="anchors-navbar"><i class="fa fa-anchor"></i><ul><p><a href="#検索機能作成">検索機能作成</a></p><li><a href="#検索機能を作成する">1. 検索機能を作成する</a></li><li><a href="#動作確認">2. 動作確認</a></li></ul></div><a href="#検索機能を作成する" id="goTop"><i class="fa fa-arrow-up"></i></a>
@@ -381,7 +395,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"2. 検索機能作成","level":"1.4","depth":1,"next":{"title":"3. Map画面作成","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"previous":{"title":"1. データ登録機能作成","level":"1.3","depth":1,"path":"Section2.md","ref":"Section2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section3.md","mtime":"2022-05-05T23:47:55.148Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-13T09:23:52.648Z"},"basePath":".","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"2. 検索機能作成","level":"1.4","depth":1,"next":{"title":"3. Map画面作成","level":"1.5","depth":1,"path":"Section4.md","ref":"Section4.md","articles":[]},"previous":{"title":"1. データ登録機能作成","level":"1.3","depth":1,"path":"Section2.md","ref":"Section2.md","articles":[]},"dir":"ltr"},"config":{"plugins":["search-pro-fixed","-lunr","-search","hide-published-with","anchors","navigator","collapsible-chapters","hints","copy-code-button","custom-favicon","insert-logo"],"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"pluginsConfig":{"collapsible-chapters":{},"hints":{"info":"fa fa-info-circle","tip":"fa fa-mortar-board","danger":"fa fa-exclamation-circle","working":"fa fa-wrench"},"search-pro-fixed":{},"hide-published-with":{},"fontsettings":{"theme":"white","family":"sans","size":2},"highlight":{},"favicon":"./img/miracleave.ico","navigator":{},"custom-favicon":{},"copy-code-button":{},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"anchors":{},"insert-logo":{"url":"./img/miracleave.png","style":"background: none; width: 100%;"}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56},"embedFonts":false},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"title":"mirameet","language":"ja","gitbook":"*"},"file":{"path":"Section3.md","mtime":"2022-05-20T12:21:01.883Z","type":"markdown"},"gitbook":{"version":"3.7.1","time":"2022-05-20T12:23:33.488Z"},"basePath":".","book":{"language":""}});
         });
     </script>
 </div>

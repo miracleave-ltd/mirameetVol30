@@ -1,6 +1,8 @@
 # 検索機能作成  
 BigQueryに登録したデータを検索するプログラムを作成します。  
-検索条件はリクエストパラメータで渡すようにし、緯度経度情報を検索結果として取得します。  
+このプログラムは、リクエストパラメータで渡された検索条件でSELECT文を作成し、  
+BigQuery APIを用いてBigQueryのデータを検索します。  
+検索結果には、緯度・経度情報を取得してレスポンス情報として、返却します。  
 実行環境はCloud Functionsです。  
 
 ----
@@ -22,10 +24,13 @@ https://console.cloud.google.com/functions/
 5. ランタイムは"Node.js 16"を選択します。
 
 6. index.jsを開き、以下コードに書き換えます。  
+【指定のデータセット名】はご自身のGCP環境に合わせた値に書き換えます。  
 エントリポイントは、JavaScriptのプログラムに合わせ、"main"に変更します。  
-{% hint style='working' %} このプログラムは、リクエストパラメータを条件に、SELECT文を作成し、BigQuery APIを用いてBigQueryのデータを検索しています。  
-検索条件はBusinessNameです。検索結果は、緯度・経度情報を取得します。  
-検索結果はレスポンス情報として、返却します。{% endhint %}
+{% hint style='working' %}let queryでSELECT文を作成します。BigQueryに登録したデータはJSON形式のため、  
+UNNESTを使用して緯度経度情報を取得するSELECT文です。  
+  
+bigquery.createQueryJobでSELECT文をBigQueryに発行します。  
+レガシーSQLを使用する場合は、useLegacySqlを"true"に設定してください。  {% endhint %}
 
     ```
     // import
@@ -109,6 +114,6 @@ https://console.cloud.google.com/functions/
 
 2. テストデータはスカイツリーと、東京タワーの二つが登録されているので、  
 リクエストパラメータに"?address=スカイツリー"のように検索値を渡すことで、  
-BigQueryの検索結果が変わることが確認できます。。  
+BigQueryの検索結果が変わることが確認できます。  
 また、テストデータの存在しない条件の場合は、NULLが返却されていることがわかります。  
     ![](img/section3-8.png) 
