@@ -179,5 +179,5 @@ https://console.cloud.google.com/google/maps-apis/studio/maps
 2. 左メニューから『マップ管理』を選択し、先ほどのマップIDをコピーし、再度Cloud Shell Editerを開きます。  
     ![](img/section4-10.png)   
 
-3. index.tsを開き、mapOptionsのmapIdに作成したマップIDに書き換え、保存します。
+3. index.tsを開き、mapOptionsのmapIdを作成したマップIDに書き換え、保存します。
     ![](img/section4-11.png)   
