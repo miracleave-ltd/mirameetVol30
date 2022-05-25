@@ -1,7 +1,7 @@
 # データ登録機能作成  
 Cloud Storageに配置されたデータファイルをCloud Functionsのトリガーとして起動させます。  
 Cloud Functionsでは、Cloud Storageのファイル読み込んでBigQueryにロードします。  
-Cloud StorageとBigQueryのロケーションは同じである必要があります。  
+Cloud StorageとBigQueryのリージョンは同じである必要があります。  
 今回のハンズオンは全て"us-central1"で統一します。
 データは、JSON形式のデータを使用します。  
 実行環境はCloud Functionsです。  

@@ -15,6 +15,10 @@ BigQueryに溜め込んだデータ（住所情報）を、 Maps JavaScript API�
     - バケット名：任意　　　※手順の中でソースコードに埋め込みます
     - リージョン：us-central1
 
+※過去のミートアップでBigQueryのデータセットとCloudStorageのバケット作成を紹介しています。  
+作成の際に参考にしてみてください。※リージョンは「us-central1」です。  
+https://miracleave-ltd.github.io/mirameetVol24/Section2.html
+
 ## 手順 
 全体手順としては次の流れで進めます。  
  　0.事前準備  
