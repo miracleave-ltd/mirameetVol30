@@ -149,8 +149,10 @@ mapOptionでは、描写の設定が可能です。
     ![](img/section4-12.png)   
 ※パラメータ内容
     ```
-    　&address=東京タワー
-    　&address=スカイツリー
+    &address=東京タワー
+    ```
+    ```
+    &address=スカイツリー
     ```
 
 ## スタイルの変更
