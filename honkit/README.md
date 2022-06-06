@@ -1,8 +1,9 @@
 # はじめに  
 ## 今回のゴール
 BigQueryに溜め込んだデータ（住所情報）を、 Maps JavaScript APIを使って画面表示します。  
-  
-データの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用します。  
+完成系はこんな感じです。  
+![](img/githubgoal.gif)   
+今回はデータの溜め込みや、画面表示をさせるために、Cloud StorageやCloud Functionsを使用します。  
 今回は大きく３機能作成しますが、全てGCP上で開発が出来るハンズオンとなります。  
 また、PCへのインストール不要なので、ブラウザ一つで開発するハンズオンを体験頂ければ幸いです。  
 

@@ -19,20 +19,16 @@
 
     ![](img/section5-1.png)   
 
-1. [Cloud Shell Editer](https://console.cloud.google.com/cloudshelleditor)から、 "http://localhost:300x/" を開きます。  
-※port（300x）は人によって異なります。  
-もし、npm startを実行していない場合はターミナルよりnpm startコマンドの上、  
-localhostにアクセスください。  
-    ```
-    npm start
-    ```
+1. [Cloud Shell Editer](https://console.cloud.google.com/cloudshelleditor)から、 "http://localhost:3001/" を開きます。  
 
-3. 追加の３件のデータをリクエストパラメータで検索してみましょう。  
-※【URL】の部分は各GCPアカウントによって異なります。  
+
+2. リクエストパラメーターを付け加え、検索条件値を入れて条件を絞ってみましょう。  
+検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。  
+    ![](img/section5-3.png)   
+※パラメータ内容
     ```
-    例）
-    　https://【URL】&address=ディズニー
-    　https://【URL】&address=ユニバーサル
+    　&address=ディズニー
+    　&address=ユニバーサル
     ```  
 検索条件に応じて東京タワーやスカイツリーが表示されるかと思います。  
 また、前手順で設定したスタイル設定も反映されていることを確認します。  
